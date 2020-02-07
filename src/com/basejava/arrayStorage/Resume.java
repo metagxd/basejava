@@ -1,3 +1,5 @@
+package com.basejava.arrayStorage;
+
 /**
  * Initial resume class
  */

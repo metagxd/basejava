@@ -1,3 +1,5 @@
+package com.basejava.arrayStorage;
+
 /**
  * Test for your ArrayStorage implementation
  */
