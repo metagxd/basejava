@@ -12,4 +12,11 @@ public class Resume {
     public String toString() {
         return uuid;
     }
+
+    /**
+     * @return the uuid
+     */
+    public String getUuid() {
+        return uuid;
+    }
 }
