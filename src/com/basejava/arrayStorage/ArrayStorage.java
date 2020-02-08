@@ -18,7 +18,7 @@ public class ArrayStorage {
 
     public void save(Resume resume) {
         storage[size()] = resume;
-        size += 1;
+        size++;
     }
 
     public Resume get(String uuid) {
@@ -34,19 +34,27 @@ public class ArrayStorage {
     }
 
     public void delete(String uuid) {
+        if (uuid == null) {
+            System.out.println("Error!");
+            return;
+        }
         int pos = 0;
-        for (int i = 0; i < size(); i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                storage[i] = null;
-                pos = i;
+        boolean isDeletionOk = false;
+        while (pos < size()) {
+            if (storage[pos].getUuid().equals(uuid)) {
+                storage[pos] = null;
+                isDeletionOk = true;
                 break;
             }
+            pos++;
         }
-        for (int i = pos; i < size - 1; i++) {
-            storage[i] = storage[i + 1];
+        if (!isDeletionOk) {
+            System.out.println("Error!");
+            return;
         }
-        storage[size] = null;
-        size -= 1;
+        System.arraycopy(storage,pos+1,storage,pos,size-pos-1);
+            storage[size] = null;
+            size--;
     }
 
     /**
@@ -57,15 +65,6 @@ public class ArrayStorage {
     }
 
     public int size() {
-        if (size != 0) {
-            return size;
-        }
-        for (Resume resume : storage) {
-            if (resume == null) {
-                break;
-            }
-            size++;
-        }
         return size;
     }
 }
