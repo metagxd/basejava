@@ -10,21 +10,21 @@ public class ArrayStorage {
     private int size;
 
     public void clear() {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
     }
 
     public void save(Resume resume) {
-        storage[size()] = resume;
+        storage[size] = resume;
         size++;
     }
 
     public Resume get(String uuid) {
         int i = 0;
 
-        while (i < size()) {
+        while (i < size) {
             if (storage[i].getUuid().equals(uuid)) {
                 return storage[i];
             }
@@ -40,9 +40,8 @@ public class ArrayStorage {
         }
         int pos = 0;
         boolean isDeletionOk = false;
-        while (pos < size()) {
+        while (pos < size) {
             if (storage[pos].getUuid().equals(uuid)) {
-                storage[pos] = null;
                 isDeletionOk = true;
                 break;
             }
@@ -52,16 +51,16 @@ public class ArrayStorage {
             System.out.println("Error!");
             return;
         }
-        System.arraycopy(storage,pos+1,storage,pos,size-pos-1);
-            storage[size] = null;
-            size--;
+        System.arraycopy(storage, pos + 1, storage, pos, size - pos - 1);
+        storage[size] = null;
+        size--;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, size);
     }
 
     public int size() {
