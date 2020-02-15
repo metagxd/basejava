@@ -1,4 +1,4 @@
-package com.basejava.arrayStorage;
+package com.basejava.arraystorage;
 
 /**
  * Initial resume class
@@ -6,16 +6,17 @@ package com.basejava.arrayStorage;
 public class Resume {
 
     // Unique identifier
-    String uuid;
+   private String uuid;
 
     @Override
     public String toString() {
         return uuid;
     }
 
-    /**
-     * @return the uuid
-     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     public String getUuid() {
         return uuid;
     }
