@@ -1,4 +1,7 @@
-package com.basejava.arraystorage;
+package com.basejava.webapp;
+
+import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.ArrayStorage;
 
 /**
  * Test for your ArrayStorage implementation
@@ -22,14 +25,16 @@ public class MainTestArrayStorage {
         System.out.println("Size: " + ARRAY_STORAGE.size());
         
         System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
-        
         printAll();
+        System.out.println("Update r1: ");
+        ARRAY_STORAGE.update(r1);
         ARRAY_STORAGE.delete(r2.getUuid());
         printAll();
         System.out.println("Size: " + ARRAY_STORAGE.size());
+        System.out.println("Update r2: ");
+        ARRAY_STORAGE.update(r2);
         ARRAY_STORAGE.clear();
         printAll();
-
         System.out.println("Size: " + ARRAY_STORAGE.size());
     }
 
