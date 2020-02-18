@@ -12,6 +12,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public void save(Resume resume) {
+        index = getResumeIndex(resume.getUuid());
         if (size == 0) {
             storage[0] = resume;
             size++;
@@ -20,10 +21,14 @@ public class SortedArrayStorage extends AbstractArrayStorage{
             storage[size] = resume;
             size++;
             return;
-        } 
-        index = getResumeIndex(resume.getUuid());
-        storage[index] = resume;
-        size++;
+        } else if (index > 0) {
+            System.out.println("ERROR: Resume " + resume.getUuid() + " already exist!");
+            return;
+        } else if (index == -1) {
+            System.arraycopy(storage, 0, storage, 1, size + 1);
+            storage[0] = resume;
+            return;
+        }
     }
 
     @Override
@@ -42,12 +47,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     }
 
     @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
-    @Override
-    protected int getResumeIndex(String uuid) {
+    public int getResumeIndex(String uuid) {
         Resume searchKey = new Resume();
         searchKey.setUuid(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
