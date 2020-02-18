@@ -12,7 +12,14 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public void save(Resume resume) {
-
+        if (size == 0) {
+            storage[0] = resume;
+            size++;
+            return;
+        }
+        index = getResumeIndex(resume.getUuid());
+        storage[index] = resume;
+        size++;
     }
 
     @Override
