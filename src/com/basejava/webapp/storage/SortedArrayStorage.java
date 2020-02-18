@@ -5,10 +5,6 @@ import com.basejava.webapp.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
-    @Override
-    public void clear() {
-
-    }
 
     @Override
     public void save(Resume resume) {
@@ -24,9 +20,12 @@ public class SortedArrayStorage extends AbstractArrayStorage{
         } else if (index > 0) {
             System.out.println("ERROR: Resume " + resume.getUuid() + " already exist!");
             return;
-        } else if (index == -1) {
-            System.arraycopy(storage, 0, storage, 1, size + 1);
-            storage[0] = resume;
+        } else if (index < 0) {
+            for (int i = Math.abs(index)-1; i != size; i++) {
+                storage[i + 1] = storage[i];
+            }
+            storage[Math.abs(index) - 1] = resume;
+            size++;
             return;
         }
     }
