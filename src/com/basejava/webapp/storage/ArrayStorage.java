@@ -62,13 +62,6 @@ public class ArrayStorage extends AbstractArrayStorage {
         size--;
     }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
     protected int getResumeIndex(String uuid) {   //return -1 if resume doesn't exist
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {

@@ -16,7 +16,11 @@ public class SortedArrayStorage extends AbstractArrayStorage{
             storage[0] = resume;
             size++;
             return;
-        }
+        } else if (index == (-size - 1)) {
+            storage[size] = resume;
+            size++;
+            return;
+        } 
         index = getResumeIndex(resume.getUuid());
         storage[index] = resume;
         size++;

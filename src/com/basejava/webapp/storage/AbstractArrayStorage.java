@@ -1,5 +1,6 @@
 package com.basejava.webapp.storage;
 
+import java.util.Arrays;
 import com.basejava.webapp.model.Resume;
 
 /**
@@ -16,5 +17,17 @@ public abstract class AbstractArrayStorage implements Storage {
         return size;
     }
 
+     public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+        /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
+    }
+    
     protected abstract int getResumeIndex(String uuid);
 }
