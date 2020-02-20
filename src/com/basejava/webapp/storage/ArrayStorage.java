@@ -7,22 +7,8 @@ import com.basejava.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-    public void save(Resume resume) {
-        if (resume.getUuid() == null) {
-            System.out.println("ERROR: null uuid not allowed!");
-            return;
-        }
-        index = getResumeIndex(resume.getUuid());
-        if (index != -1) {
-            System.out.println("ERROR: Resume " + resume.getUuid() + " already exist!");
-            return;
-        }
-        if (size == STORAGE_LIMIT) {
-            System.out.println("ERROR: Storage overflow!");
-            return;
-        }
+    protected void doSave(Resume resume) {
         storage[size] = resume;
-        size++;
     }
 
     protected int getResumeIndex(String uuid) {   //return -1 if resume doesn't exist

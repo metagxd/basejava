@@ -22,10 +22,9 @@ public class MainTestSortedArrayStorage {
         SORTED_ARRAY_STORAGE.save(r1);
         SORTED_ARRAY_STORAGE.save(r3);
         SORTED_ARRAY_STORAGE.save(r4);
-        System.out.println(SORTED_ARRAY_STORAGE.getResumeIndex(r2.getUuid()));
         System.out.println("Get r2: " + SORTED_ARRAY_STORAGE.get(r2.getUuid()));
         System.out.println("Size: " + SORTED_ARRAY_STORAGE.size());
-        
+
         System.out.println("Get dummy: " + SORTED_ARRAY_STORAGE.get("dummy"));
         printAll();
         System.out.println("Update r1: ");
