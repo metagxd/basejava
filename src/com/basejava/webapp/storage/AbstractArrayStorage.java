@@ -37,11 +37,6 @@ public abstract class AbstractArrayStorage implements Storage {
             System.out.println("ERROR: Storage overflow!");
             return;
         }
-        if (size == 0) {
-            storage[0] = resume;
-            size++;
-            return;
-        }
         doSave(resume);
         size++;
     }
