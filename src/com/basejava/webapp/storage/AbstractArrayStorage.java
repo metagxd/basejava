@@ -1,5 +1,8 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.exception.ExistStorageException;
+import com.basejava.webapp.exception.NotExistStorageException;
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -25,17 +28,14 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume resume) {
         if (resume.getUuid() == null) {
-            System.out.println("ERROR: null uuid not allowed!");
-            return;
+            throw new StorageException("Null uuid not allowed!", resume.getUuid());
         }
         index = getResumeIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.println("ERROR: Resume " + resume.getUuid() + " already exist!");
-            return;
+            throw new ExistStorageException(resume.getUuid());
         }
         if (size == STORAGE_LIMIT) {
-            System.out.println("ERROR: Storage overflow!");
-            return;
+            throw new StorageException("Storage overflow!", resume.getUuid());
         }
         doSave(resume);
         size++;
@@ -44,8 +44,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         index = getResumeIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("ERROR: Resume " + resume.getUuid() + " doesn't exist!");
-            return;
+            throw new NotExistStorageException(resume.getUuid());
         }
         storage[index] = resume;
     }
@@ -53,8 +52,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         index = getResumeIndex(uuid);
         if (index < 0) {
-            System.out.println("ERROR: Resume " + uuid + " doesn't exist!");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -62,8 +60,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(String uuid) {
         index = getResumeIndex(uuid);
         if (index < 0) {
-            System.out.println("ERROR: Resume " + uuid + " doesn't exist!");
-            return;
+            throw new NotExistStorageException(uuid);
         }
         doDelete(index);
         storage[size - 1] = null;
