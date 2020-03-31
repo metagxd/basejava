@@ -5,7 +5,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.ArrayList;
 
 public class ListStorage extends AbstractStorage {
-    protected ArrayList<Resume> list = new ArrayList<>();
+    private ArrayList<Resume> list = new ArrayList<>();
 
     public int size() {
         return list.size();
@@ -27,8 +27,7 @@ public class ListStorage extends AbstractStorage {
     @Override
     public Resume[] getAll() {
         Resume[] resumes = new Resume[list.size()];
-        resumes = list.toArray(resumes);
-        return resumes;
+        return list.toArray(resumes);
     }
 
     protected int getResumeIndex(String uuid) {
