@@ -15,12 +15,13 @@ public class ListStorage extends AbstractStorage {
         list.clear();
     }
 
-    public Resume doGet(int index) {
+    public Resume doGet(String uuid) {
+        int index = getResumeIndex(uuid);
         return list.get(index);
     }
 
-    protected void doDelete(int index) {
-        list.remove(index);
+    protected void doDelete(String uuid) {
+        list.remove(getResumeIndex(uuid));
         list.trimToSize();
     }
 
@@ -35,12 +36,12 @@ public class ListStorage extends AbstractStorage {
         return list.indexOf(searchKey);
     }
 
-    protected void doSave(int index, Resume resume) {
+    protected void doSave(Resume resume) {
         list.add(resume);
     }
 
     @Override
-    protected void doUpdate(int index, Resume resume) {
+    protected void doUpdate(Resume resume) {
         list.set(index, resume);
     }
 }
