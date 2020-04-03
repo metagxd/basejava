@@ -40,8 +40,8 @@ public class ListStorage extends AbstractStorage {
         list.add(resume);
     }
 
-    @Override
     protected void doUpdate(Resume resume) {
+        int index = getResumeIndex(resume.getUuid());
         list.set(index, resume);
     }
 }

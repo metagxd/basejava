@@ -6,13 +6,12 @@ import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    protected int index;
 
     public void save(Resume resume) {
         if (resume.getUuid() == null) {
             throw new StorageException("Null uuid not allowed!", resume.getUuid());
         }
-        index = getResumeIndex(resume.getUuid());
+        int index = getResumeIndex(resume.getUuid());
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         }
@@ -45,7 +44,7 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void doDelete(String uuid);
 
     private void checkExist(String uuid) {
-        index = getResumeIndex(uuid);
+        int index = getResumeIndex(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
