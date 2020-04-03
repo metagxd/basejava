@@ -20,27 +20,31 @@ public class MapStorage extends AbstractStorage {
         return map.values().toArray(resumes);
     }
 
-    //return -1 if resume doesn't exist, return 1 if resume already exist.
-    protected int getResumeIndex(String uuid) {
-        if (map.containsKey(uuid)) {
-            return 1;
-        }
-        return -1;
+    protected Object getResumeSearchKey(String uuid) {
+        return uuid;
     }
 
-    protected void doSave(Resume resume) {
-        map.put(resume.getUuid(), resume);
+    protected boolean isExist(String uuid) {
+        return map.containsKey(uuid);
     }
 
-    protected void doUpdate(Resume resume) {
-        doSave(resume);
+    protected void doSave(Resume resume, Object searchKey) {
+        map.put(getStringSearchKey(searchKey), resume);
     }
 
-    protected Resume doGet(String uuid) {
-        return map.get(uuid);
+    protected void doUpdate(Resume resume, Object searchKey) {
+        doSave(resume, searchKey);
     }
 
-    protected void doDelete(String uuid) {
-        map.remove(uuid);
+    protected Resume doGet(Object searchKey) {
+        return map.get(getStringSearchKey(searchKey));
+    }
+
+    protected void doDelete(Object searchKey) {
+        map.remove(getStringSearchKey(searchKey));
+    }
+
+    private String getStringSearchKey(Object searchKey) {
+        return (String) searchKey;
     }
 }
