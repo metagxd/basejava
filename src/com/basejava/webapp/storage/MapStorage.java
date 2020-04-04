@@ -2,7 +2,9 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MapStorage extends AbstractStorage {
     private HashMap<String, Resume> map = new HashMap<>();
@@ -15,39 +17,37 @@ public class MapStorage extends AbstractStorage {
         map.clear();
     }
 
-    public Resume[] getAll() {
-        Resume[] resumes = new Resume[map.size()];
-        return map.values().toArray(resumes);
+    @Override
+    public List<Resume> getListOfResumes() {
+        return new ArrayList<>(map.values());
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Collection<Resume> resumes = map.values();
-        ArrayList<Resume> resumeArrayList = new ArrayList<>(resumes);
-        Collections.sort(resumeArrayList);
-        return resumeArrayList;
-    }
-
     protected String getResumeSearchKey(String uuid) {
         return uuid;
     }
 
+    @Override
     protected boolean isExist(Object searchKey) {
-        return map.containsKey((String) searchKey);
+        return map.containsKey(searchKey);
     }
 
+    @Override
     protected void doSave(Resume resume, Object searchKey) {
         map.put(getStringSearchKey(searchKey), resume);
     }
 
+    @Override
     protected void doUpdate(Resume resume, Object searchKey) {
         doSave(resume, searchKey);
     }
 
+    @Override
     protected Resume doGet(Object searchKey) {
         return map.get(getStringSearchKey(searchKey));
     }
 
+    @Override
     protected void doDelete(Object searchKey) {
         map.remove(getStringSearchKey(searchKey));
     }

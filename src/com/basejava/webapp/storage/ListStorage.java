@@ -3,7 +3,6 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
@@ -30,16 +29,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        Resume[] resumes = new Resume[list.size()];
-        return list.toArray(resumes);
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        ArrayList<Resume> resumes = this.list;
-        Collections.sort(resumes);
-        return resumes;
+    public List<Resume> getListOfResumes() {
+        return this.list;
     }
 
     @Override

@@ -4,7 +4,6 @@ import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,10 +30,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> resumes = Arrays.asList(Arrays.copyOf(storage,size));
-        Collections.sort(resumes);
-        return resumes;
+    public List<Resume> getListOfResumes() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     protected void doUpdate(Resume resume, Object searchKey) {
