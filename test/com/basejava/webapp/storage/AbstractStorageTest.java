@@ -6,13 +6,14 @@ import com.basejava.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 
 public abstract class AbstractStorageTest {
 
-    protected Storage storage;
     public static final String uuid1 = "UUID1";
     public static final String uuid2 = "UUID2";
     public static final String uuid3 = "UUID3";
@@ -21,6 +22,7 @@ public abstract class AbstractStorageTest {
     public static final Resume resume2 = new Resume(uuid2);
     public static final Resume resume3 = new Resume(uuid3);
     public static final Resume resume4 = new Resume(uuid4);
+    protected Storage storage;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -72,8 +74,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void get() {
         assertGet(resume1);
-        assertGet(resume2);
         assertGet(resume3);
+        assertGet(resume2);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -94,10 +96,16 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() {
-        Resume[] resumes = storage.getAll();
-        Resume[] expectedResumes = {resume1, resume2, resume3};
-        assertArrayEquals(expectedResumes, resumes);
+    public void getAllSorted() {
+        storage.clear();
+        storage.save(resume3);
+        storage.save(resume1);
+        storage.save(resume4);
+        storage.save(resume2);
+
+        List<Resume> resumes = storage.getAllSorted();
+        Resume[] expectedResumes = {resume1, resume2, resume3, resume4};
+        assertArrayEquals(expectedResumes, resumes.toArray());
     }
 
     private void assertGet(Resume resume) {

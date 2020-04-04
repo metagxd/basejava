@@ -9,6 +9,7 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
+    private String fullName;
     private final String uuid;
 
     public Resume() {
@@ -17,6 +18,10 @@ public class Resume implements Comparable<Resume> {
 
     public Resume(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getFullName() {
+        return fullName;
     }
 
     public String getUuid() {

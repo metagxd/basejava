@@ -7,8 +7,8 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     protected Object getResumeSearchKey(String uuid) {
-        Resume searchingResume = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchingResume);
+        Resume desiredResume = new Resume(uuid);
+        return Arrays.binarySearch(storage, 0, size, desiredResume);
     }
 
     protected void addResume(int index, Resume resume) {

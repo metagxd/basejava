@@ -2,7 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
-import java.util.HashMap;
+import java.util.*;
 
 public class MapStorage extends AbstractStorage {
     private HashMap<String, Resume> map = new HashMap<>();
@@ -20,12 +20,20 @@ public class MapStorage extends AbstractStorage {
         return map.values().toArray(resumes);
     }
 
-    protected Object getResumeSearchKey(String uuid) {
+    @Override
+    public List<Resume> getAllSorted() {
+        Collection<Resume> resumes = map.values();
+        ArrayList<Resume> resumeArrayList = new ArrayList<>(resumes);
+        Collections.sort(resumeArrayList);
+        return resumeArrayList;
+    }
+
+    protected String getResumeSearchKey(String uuid) {
         return uuid;
     }
 
-    protected boolean isExist(String uuid) {
-        return map.containsKey(uuid);
+    protected boolean isExist(Object searchKey) {
+        return map.containsKey((String) searchKey);
     }
 
     protected void doSave(Resume resume, Object searchKey) {
