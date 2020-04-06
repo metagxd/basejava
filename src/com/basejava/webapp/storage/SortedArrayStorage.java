@@ -3,12 +3,15 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    public static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
+
     protected Object getResumeSearchKey(String uuid) {
-        Resume desiredResume = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, desiredResume);
+        Resume desiredResume = new Resume("", uuid);
+        return Arrays.binarySearch(storage, 0, size, desiredResume, RESUME_COMPARATOR);
     }
 
     protected void addResume(int index, Resume resume) {
