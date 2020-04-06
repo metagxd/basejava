@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapStorage extends AbstractStorage {
+public class UuidMapStorage extends AbstractStorage {
     private HashMap<String, Resume> map = new HashMap<>();
 
     public int size() {
@@ -29,7 +29,8 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return map.containsKey(searchKey);
+        String uuid = (String) searchKey;
+        return map.containsKey(uuid);
     }
 
     @Override
