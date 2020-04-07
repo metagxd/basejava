@@ -9,11 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    protected Object searchKey;
-
-    protected static int getIntSearchKey(Object searchKey) {
-        return (Integer) searchKey;
-    }
+    private Object searchKey;
 
     public void save(Resume resume) {
         if (resume.getUuid() == null) {

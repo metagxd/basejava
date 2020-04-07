@@ -35,7 +35,7 @@ public class UuidMapStorage extends AbstractStorage {
 
     @Override
     protected void doSave(Resume resume, Object searchKey) {
-        map.put(getStringSearchKey(searchKey), resume);
+        map.put((String) searchKey, resume);
     }
 
     @Override
@@ -45,15 +45,12 @@ public class UuidMapStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        return map.get(getStringSearchKey(searchKey));
+        return map.get(searchKey);
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        map.remove(getStringSearchKey(searchKey));
+        map.remove(searchKey);
     }
 
-    private String getStringSearchKey(Object searchKey) {
-        return (String) searchKey;
-    }
 }

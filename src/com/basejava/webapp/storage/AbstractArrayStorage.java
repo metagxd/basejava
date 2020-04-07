@@ -25,17 +25,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size = 0;
     }
 
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
-    }
-
     @Override
     public List<Resume> getListOfResumes() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     protected void doUpdate(Resume resume, Object searchKey) {
-        index = getIntSearchKey(searchKey);
+        index = (Integer) searchKey;
         storage[index] = resume;
 
     }
@@ -44,18 +40,18 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow!", "");
         }
-        index = getIntSearchKey(searchKey);
+        index = (Integer) searchKey;
         addResume(index, resume);
         size++;
     }
 
     protected Resume doGet(Object searchKey) {
-        index = getIntSearchKey(searchKey);
+        index = (Integer) searchKey;
         return storage[index];
     }
 
     protected void doDelete(Object searchKey) {
-        index = getIntSearchKey(searchKey);
+        index = (Integer) searchKey;
         deleteResume(index);
         storage[size - 1] = null;
         size--;
@@ -63,7 +59,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
 
     protected boolean isExist(Object index) {
-        return ((Integer) index) >= 0;
+        return (Integer) index >= 0;
     }
 
     protected abstract void deleteResume(int index);

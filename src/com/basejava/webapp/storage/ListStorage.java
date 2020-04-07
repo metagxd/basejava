@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private ArrayList<Resume> list = new ArrayList<>();
+    private List<Resume> list = new ArrayList<>();
 
     public int size() {
         return list.size();
@@ -18,14 +18,13 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume doGet(Object searchKey) {
-        return list.get(getIntSearchKey(searchKey));
+        return list.get((Integer) searchKey);
     }
 
     @Override
     protected void doDelete(Object searchKey) {
-        int index = getIntSearchKey(searchKey);
+        int index = (Integer) searchKey;
         list.remove(index);
-        list.trimToSize();
     }
 
     @Override
@@ -35,7 +34,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Integer getResumeSearchKey(String uuid) {
-        return list.indexOf(new Resume("name", uuid));
+        return list.indexOf(new Resume(uuid, "name"));
     }
 
     @Override
@@ -50,7 +49,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void doUpdate(Resume resume, Object searchKey) {
-        int index = getIntSearchKey(searchKey);
+        int index = (Integer) searchKey;
         list.set(index, resume);
     }
 }
