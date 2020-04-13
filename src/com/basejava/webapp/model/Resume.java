@@ -1,5 +1,7 @@
 package com.basejava.webapp.model;
 
+import java.util.EnumMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,8 +11,9 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
 
     private final String uuid;
-    // Unique identifier
-    private String fullName;
+    private final String fullName;
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Object> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -21,6 +24,22 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
+    public void addContact(ContactType contactType, String contactInformation) {
+        Objects.requireNonNull(contactType, "contactType can't be null!");
+        this.contacts.put(contactType, contactInformation);
+    }
+
+    public void addSection(SectionType sectionType, Object object) {
+        this.sections.put(sectionType, object);
+    }
+
+    public String getContact(ContactType contactType) {
+        return contacts.get(contactType);
+    }
+
+    public Object getSection(SectionType sectionType) {
+        return sections.get(sectionType);
+    }
     public String getFullName() {
         return fullName;
     }
@@ -31,7 +50,7 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return fullName + " " + uuid;
+        return fullName + " " + uuid + contacts.toString();
     }
 
     @Override
