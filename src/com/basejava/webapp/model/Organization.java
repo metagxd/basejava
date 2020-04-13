@@ -4,11 +4,11 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Organization {
-    private Link homePage;
+    private final Link homePage;
     private final LocalDate startTime;
     private final LocalDate endTime;
-    private String title;
-    private String description;
+    private final String title;
+    private final String description;
 
     public Organization(String urlName, String url, LocalDate startTime, LocalDate endTime, String title, String description) {
         this.homePage = new Link (urlName, url);
@@ -16,6 +16,10 @@ public class Organization {
         this.endTime = endTime;
         this.title = title;
         this.description = description;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     @Override

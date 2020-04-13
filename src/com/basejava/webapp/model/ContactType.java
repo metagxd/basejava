@@ -11,8 +11,8 @@ public enum ContactType {
 
     private final String type;
 
-    ContactType(String typeName) {
-        this.type = typeName;
+    ContactType(String type) {
+        this.type = type;
     }
 
     @Override

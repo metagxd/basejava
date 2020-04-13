@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ResumeMapStorage extends AbstractStorage<Resume> {
-    private HashMap<String, Resume> map = new HashMap<>();
+    private final HashMap<String, Resume> map = new HashMap<>();
 
     public int size() {
         return map.size();

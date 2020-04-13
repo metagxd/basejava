@@ -10,10 +10,6 @@ public class ListSection extends Section {
         this.items = items;
     }
 
-    public void addItem(String item) {
-        items.add(item);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
