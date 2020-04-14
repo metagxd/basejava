@@ -14,8 +14,8 @@ import static org.junit.Assert.assertThat;
 public class ResumeTest {
     private static final OrganizationSection EDUCATION_SECTION = new OrganizationSection();
     private static final OrganizationSection EXPERIENCE_SECTION = new OrganizationSection();
-    private static final Organization SCHOOL = new Organization("", "", LocalDate.of(1980, 9, 1), LocalDate.of(1988, 5, 31), "School", "example");
-    private static final Organization JOB = new Organization("link", "www.company.com", LocalDate.of(1994, 10, 1), LocalDate.of(1994, 12, 1), "CompanyName", "example description");
+    private static final Organization SCHOOL = new Organization("School", "", "", LocalDate.of(1980, 9, 1), LocalDate.of(1988, 5, 31), "example");
+    private static final Organization JOB = new Organization("CompanyName", "link", "www.company.com", LocalDate.of(1994, 10, 1), LocalDate.of(1994, 12, 1), "example description");
     private static final ListSection ACHIEVEMENT = new ListSection(Arrays.asList("achievement1", "achievement2"));
     private static final ListSection QUALIFICATIONS = new ListSection(Arrays.asList("qualification1", "qualification2"));
     private static final String NAME = "DUMMY";
@@ -28,6 +28,7 @@ public class ResumeTest {
     private static final String LINKEDIN = "@example";
     private static final String MAIL = "example@mail.com";
     private static final Link GITHUB = new Link("GitHub", "github.com");
+    private static final Link STACKOVERFLOW = new Link("StackOverflow", "stackoverflow.com");
     private static final Link HOME_PAGE = new Link("Home page", "www.site.com");
     private final Resume resume = new Resume(UUID_1, NAME);
 
@@ -47,12 +48,13 @@ public class ResumeTest {
         resume.addContact(ContactType.LINKEDIN, LINKEDIN);
         resume.addContact(ContactType.MAIL, MAIL);
         resume.addContact(ContactType.GITHUB, GITHUB);
+        resume.addContact(ContactType.STACKOVERFLOW, STACKOVERFLOW);
         resume.addContact(ContactType.HOME_PAGE, HOME_PAGE);
     }
 
     @Test
     public void testContact() {
-        List<Object> expected = Arrays.asList(PHONE, MOBILE, SKYPE, LINKEDIN, MAIL, GITHUB, HOME_PAGE);
+        List<Object> expected = Arrays.asList(PHONE, MOBILE, SKYPE, LINKEDIN, MAIL, GITHUB,STACKOVERFLOW, HOME_PAGE);
         List<Object> actual = new ArrayList<>();
         for (ContactType contactType : ContactType.values()) {
             actual.add(resume.getContact(contactType));

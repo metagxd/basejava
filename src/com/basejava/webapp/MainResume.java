@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class MainResume {
     public static void main(String[] args) {
-        Resume resume = new Resume("Григорий Кислин");
+       /* Resume resume = new Resume("Григорий Кислин");
         resume.addContact(ContactType.PHONE, "+7(921)855-0482");
         resume.addContact(ContactType.SKYPE, "grigory.kislin");
         resume.addContact(ContactType.MAIL, "gkislin@yandex.ru");
@@ -41,10 +41,15 @@ public class MainResume {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(new ArrayList<>(Arrays.asList(qualification1, qualification2, qualification3, qualification4, qualification5, qualification6, qualification7, qualification7, qualification8, qualification9, qualification10, qualification11))));
 
         OrganizationSection experience = new OrganizationSection();
-        Organization jvop = new Organization("Java Online Project", "www.javaops.ru", LocalDate.of(2013,10,1),LocalDate.now(),"Java Online Project", "Создание, организация и проведение Java онлайн проектов и стажировок.");
+        Organization jvop = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2013,10,1),LocalDate.now(), "Создание, организация и проведение Java онлайн проектов и стажировок.");
         experience.addOrganization(jvop);
-        resume.addSection(SectionType.EXPERIENCE, new OrganizationSection());
-
-        System.out.println(resume.toString());
+        resume.addSection(SectionType.EXPERIENCE,experience);*/
+        Organization testOrganization = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2013,10,1),LocalDate.of(2014,10,1), "Создание, организация и проведение Java онлайн проектов и стажировок.");
+        OrganizationSection testJobs = new OrganizationSection();
+        testJobs.addOrganization(testOrganization);
+        System.out.println(testJobs.toString());
+        Organization testOrganization2 = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2016,2,1),LocalDate.now(), "2nd");
+        testJobs.addOrganization(testOrganization);
+        System.out.println(testJobs.toString());
     }
 }
