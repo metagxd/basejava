@@ -23,7 +23,7 @@ public class ResumeTest {
     private static final String PHONE = "8-800-000-00-00";
     private static final String PERSONAL = "personals example";
     private static final String OBJECTIVE = "objective example";
-    private static final String MOBILE = "education example";
+    private static final String MOBILE = "8-800-000-00-00";
     private static final String SKYPE = "skype_example";
     private static final String LINKEDIN = "@example";
     private static final String MAIL = "example@mail.com";

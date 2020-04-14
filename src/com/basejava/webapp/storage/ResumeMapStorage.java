@@ -44,15 +44,12 @@ public class ResumeMapStorage extends AbstractStorage<Resume> {
 
     @Override
     protected Resume doGet(Resume searchKey) {
-        return map.get(getUUIDFromSearchKey(searchKey));
+        return map.get(searchKey.getUuid());
     }
 
     @Override
     protected void doDelete(Resume searchKey) {
-        map.remove(getUUIDFromSearchKey(searchKey));
-    }
-
-    private String getUUIDFromSearchKey(Resume searchKey) {
-        return searchKey.getUuid();
+        map.remove(searchKey.getUuid());
     }
 }
+
