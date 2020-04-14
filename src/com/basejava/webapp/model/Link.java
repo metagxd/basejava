@@ -4,12 +4,17 @@ import java.util.Objects;
 
 public class Link {
     private final String name;
-    private final String  url;
+    private final String url;
 
     public Link(String name, String url) {
         Objects.requireNonNull(name, "name can't be null");
         this.name = name;
         this.url = url;
+    }
+
+    @Override
+    public String toString() {
+        return name + " URL: " + url;
     }
 
     @Override
