@@ -5,20 +5,16 @@ import java.util.Objects;
 
 public class MainFile {
     public static void main(String[] args) {
-        String folderPath = "C:\\basejava";
-        try {
-            folderPath = args[0];
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-        }
+        File project = new File("C:\\basejava");
+        fileListener(project);
+    }
 
-        File directory = new File(folderPath);
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
+    public static void fileListener(File path) {
+        for (File file : Objects.requireNonNull(path.listFiles())) {
             if (file.isDirectory()) {
-                String[] path2 = new String[1];
-                path2[0] = file.getName();
-                main(path2);
+                fileListener(file);
             }
-            System.out.println(file.getAbsolutePath());
+            System.out.println(file.getName());
         }
     }
 }

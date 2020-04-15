@@ -5,9 +5,10 @@ import com.basejava.webapp.model.Resume;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UuidMapStorage extends AbstractStorage<String> {
-    private final HashMap<String, Resume> map = new HashMap<>();
+    private final Map<String, Resume> map = new HashMap<>();
 
     public int size() {
         return map.size();

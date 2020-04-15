@@ -3,7 +3,7 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.model.ResumeTestData;
+import com.basejava.webapp.ResumeTestData;
 import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
@@ -14,10 +14,11 @@ import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
-    protected Resume resume1 = (ResumeTestData.getResume().get(0));
-    protected Resume resume2 = (ResumeTestData.getResume().get(1));
-    protected Resume resume3 = (ResumeTestData.getResume().get(2));
-    protected Resume resume4 = (ResumeTestData.getResume().get(3));
+    protected static final Resume resume1 = (ResumeTestData.getResume("uuid1", "name1"));
+    protected static final Resume resume2 = (ResumeTestData.getResume("uuid2", "name2"));
+    protected static final Resume resume3 = (ResumeTestData.getResume("uuid3", "name3"));
+    protected static final Resume resume4 = (ResumeTestData.getResume("uuid4", "name4"));
+
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -91,7 +92,6 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-
         List<Resume> actualResumes = storage.getAllSorted();
         List<Resume> expectedResumes = Arrays.asList(resume1, resume2, resume3);
         assertThat(actualResumes,is(expectedResumes));
