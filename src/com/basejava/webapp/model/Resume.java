@@ -43,6 +43,7 @@ public class Resume implements Comparable<Resume> {
         Objects.requireNonNull(sectionType, "SectionType can't be null!");
         return sections.get(sectionType);
     }
+
     public String getFullName() {
         return fullName;
     }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class UuidMapStorage extends AbstractStorage<String> {
-    private HashMap<String, Resume> map = new HashMap<>();
+    private final HashMap<String, Resume> map = new HashMap<>();
 
     public int size() {
         return map.size();

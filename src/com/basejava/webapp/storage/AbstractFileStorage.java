@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
@@ -18,7 +19,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public int size() {
         if (directory.list() != null && directory.exists()) {
-            return directory.list().length;
+            return Objects.requireNonNull(directory.list()).length;
         }
         return 0;
     }
@@ -38,7 +39,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> getListOfResumes() {
         List<Resume> resumes = new ArrayList<>();
-        for (File file : directory.listFiles()) {
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
             resumes.add(doRead(file));
         }
         return resumes;
@@ -79,7 +80,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected void doDelete(File file) {
-        for (File dirFiles : directory.listFiles()) {
+        for (File dirFiles : Objects.requireNonNull(directory.listFiles())) {
             if (dirFiles.getName().equals(file.getName())) {
                 if (!dirFiles.delete()) {
                     throw new StorageException("Can't delete file: ", file.getName());

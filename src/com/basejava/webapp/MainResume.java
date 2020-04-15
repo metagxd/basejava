@@ -1,10 +1,9 @@
 package com.basejava.webapp;
 
-import com.basejava.webapp.model.*;
+import com.basejava.webapp.model.Organization;
+import com.basejava.webapp.model.OrganizationSection;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainResume {
     public static void main(String[] args) {
@@ -44,11 +43,11 @@ public class MainResume {
         Organization jvop = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2013,10,1),LocalDate.now(), "Создание, организация и проведение Java онлайн проектов и стажировок.");
         experience.addOrganization(jvop);
         resume.addSection(SectionType.EXPERIENCE,experience);*/
-        Organization testOrganization = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2013,10,1),LocalDate.of(2014,10,1), "Создание, организация и проведение Java онлайн проектов и стажировок.");
+        Organization testOrganization = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2013, 10, 1), LocalDate.of(2014, 10, 1), "Создание, организация и проведение Java онлайн проектов и стажировок.");
         OrganizationSection testJobs = new OrganizationSection();
         testJobs.addOrganization(testOrganization);
         System.out.println(testJobs.toString());
-        Organization testOrganization2 = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2016,2,1),LocalDate.now(), "2nd");
+        Organization testOrganization2 = new Organization("Java Online Project", "Java Online Project", "www.javaops.ru", LocalDate.of(2016, 2, 1), LocalDate.now(), "2nd");
         testJobs.addOrganization(testOrganization);
         System.out.println(testJobs.toString());
     }

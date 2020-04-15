@@ -8,7 +8,8 @@ public class MainFile {
         String folderPath = "C:\\basejava";
         try {
             folderPath = args[0];
-        } catch (ArrayIndexOutOfBoundsException ignored){}
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+        }
 
         File directory = new File(folderPath);
         for (File file : Objects.requireNonNull(directory.listFiles())) {
