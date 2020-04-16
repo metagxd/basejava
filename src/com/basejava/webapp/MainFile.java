@@ -6,15 +6,20 @@ import java.util.Objects;
 public class MainFile {
     public static void main(String[] args) {
         File project = new File("C:\\basejava");
-        fileListener(project);
+        fileListener(project, 0);
     }
 
-    public static void fileListener(File path) {
+    public static void fileListener(File path, int level) {
         for (File file : Objects.requireNonNull(path.listFiles())) {
-            if (file.isDirectory()) {
-                fileListener(file);
+            for (int i = 0; i < level; i++) {
+                System.out.print("\t");
             }
-            System.out.println(file.getName());
+            if (file.isFile()) {
+                System.out.println(file.getName());
+            } else {
+                System.out.println("["+file.getName()+"]");
+                fileListener(file, level + 1);
+            }
         }
     }
 }
