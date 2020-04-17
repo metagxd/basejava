@@ -1,23 +1,27 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.ResumeTestData;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 
 public abstract class AbstractStorageTest {
-    protected Storage storage;
     protected static final Resume resume1 = (ResumeTestData.getResume("uuid1", "name1"));
     protected static final Resume resume2 = (ResumeTestData.getResume("uuid2", "name2"));
     protected static final Resume resume3 = (ResumeTestData.getResume("uuid3", "name3"));
     protected static final Resume resume4 = (ResumeTestData.getResume("uuid4", "name4"));
+    protected static final File STORAGE_DIRECTORY = new File("C:\\basejava\\storage");
+    protected Storage storage;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -67,7 +71,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void get() {
+    public void get(){
         assertGet(resume1);
         assertGet(resume3);
         assertGet(resume2);
@@ -94,7 +98,7 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> actualResumes = storage.getAllSorted();
         List<Resume> expectedResumes = Arrays.asList(resume1, resume2, resume3);
-        assertThat(actualResumes,is(expectedResumes));
+        assertThat(actualResumes, is(expectedResumes));
     }
 
 

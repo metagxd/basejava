@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends Section {
+    private static final long serialVersionUID = 1L;
+
     List<String> items;
 
     public ListSection(List<String> items) {
@@ -15,7 +17,7 @@ public class ListSection extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ListSection that = (ListSection) o;
-        return items.equals(that.items);
+        return Objects.equals(items, that.items);
     }
 
     @Override

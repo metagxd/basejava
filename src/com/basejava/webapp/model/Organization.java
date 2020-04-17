@@ -1,11 +1,14 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final Link homePage;
     private final String title;
     private final List<Period> periods = new ArrayList<>();
@@ -36,7 +39,7 @@ public class Organization {
         Organization that = (Organization) o;
         return Objects.equals(homePage, that.homePage) &&
                 title.equals(that.title) &&
-                Objects.equals(periods, that.periods);
+                periods.equals(that.periods);
     }
 
     @Override
@@ -53,7 +56,9 @@ public class Organization {
                 '}';
     }
 
-    public static class Period {
+    public static class Period implements Serializable{
+        private static final long serialVersionUID = 1L;
+
         private final String description;
         private final LocalDate startTime;
         private final LocalDate endTime;
@@ -62,6 +67,21 @@ public class Organization {
             this.startTime = startTime;
             this.endTime = endTime;
             this.description = description;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Period period = (Period) o;
+            return description.equals(period.description) &&
+                    startTime.equals(period.startTime) &&
+                    endTime.equals(period.endTime);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(description, startTime, endTime);
         }
 
         @Override

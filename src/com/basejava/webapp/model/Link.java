@@ -1,8 +1,11 @@
 package com.basejava.webapp.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Link {
+public class Link implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String name;
     private final String url;
 
@@ -22,7 +25,7 @@ public class Link {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Link link = (Link) o;
-        return name.equals(link.name) &&
+        return Objects.equals(name, link.name) &&
                 Objects.equals(url, link.url);
     }
 
