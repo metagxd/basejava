@@ -84,8 +84,8 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     private Stream<Path> getStreamOfPath() {
-        try (Stream<Path> list = Files.list(directory)) {
-            return list;
+        try {
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Can't read directory!", e);
         }
