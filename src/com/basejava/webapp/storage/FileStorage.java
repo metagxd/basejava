@@ -2,46 +2,38 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.SerializationStrategy.SerializationStrategy;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
+    private final SerializationStrategy serializationStrategy;
 
-    AbstractFileStorage(File directory) {
+    FileStorage(File directory, SerializationStrategy serializationStrategy) {
         this.directory = directory;
+        this.serializationStrategy = serializationStrategy;
     }
 
     @Override
     public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Size read error!", "");
-        }
-        return list.length;
+        return getListOfFiles().length;
     }
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                doDelete(file);
-            }
+        for (File file : getListOfFiles()) {
+            doDelete(file);
         }
     }
 
     @Override
     protected List<Resume> getListOfResumes() {
         List<Resume> resumes = new ArrayList<>();
-        File[] files = directory.listFiles();
-        if (files == null) {
-            throw new StorageException("Directory read error", "");
-        }
-        for (File file : files) {
-                resumes.add(doGet(file));
+        for (File file : getListOfFiles()) {
+            resumes.add(doGet(file));
         }
         return resumes;
     }
@@ -72,7 +64,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume resume, File file) {
         try {
-                doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            serializationStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Cant write file: " + file.getAbsolutePath(), resume.getUuid(), e);
         }
@@ -81,7 +73,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File file) {
         try {
-            return doRead(new BufferedInputStream(new FileInputStream(file)));
+            return serializationStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Cant read file: " + file.getAbsolutePath(), file.getName(), e);
         }
@@ -94,8 +86,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-
-    protected abstract void doWrite(Resume resume, OutputStream outputStream) throws IOException;
-
-    protected abstract Resume doRead(InputStream inputStream) throws IOException;
+    private File[] getListOfFiles() {
+        File[] listFiles = directory.listFiles();
+        if (listFiles == null) {
+            throw new StorageException("Directory read error", "");
+        }
+        return listFiles;
+    }
 }
