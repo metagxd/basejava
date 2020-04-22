@@ -20,8 +20,8 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, name);
         EDUCATION_SECTION.addOrganization(SCHOOL);
         EXPERIENCE_SECTION.addOrganization(JOB);
-        resume.addSection(SectionType.PERSONAL, "personals example");
-        resume.addSection(SectionType.OBJECTIVE, "objective example");
+        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
+        resume.addSection(SectionType.OBJECTIVE, new TextSection("objective example"));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("achievement1", "achievement2")));
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("qualification1", "qualification2")));
         resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
@@ -31,10 +31,10 @@ public class ResumeTestData {
         resume.addContact(ContactType.SKYPE, "skype_example");
         resume.addContact(ContactType.LINKEDIN, "@example");
         resume.addContact(ContactType.MAIL, "example@mail.com");
-        resume.addContact(ContactType.GITHUB, new Link("GitHub", "github.com"));
-        resume.addContact(ContactType.STACKOVERFLOW, new Link("Home page", "www.site.com"));
-        resume.addContact(ContactType.HOME_PAGE, new Link("Home page", "www.site.com"));
-        resume.addSection(SectionType.PERSONAL, "personals example");
+        resume.addContact(ContactType.GITHUB, "github.com");
+        resume.addContact(ContactType.STACKOVERFLOW, "www.site.com");
+        resume.addContact(ContactType.HOME_PAGE,"www.site.com");
+        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
         return resume;
     }
 }
