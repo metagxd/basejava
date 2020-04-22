@@ -2,15 +2,18 @@ package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
 
-import java.time.LocalDate;
+import static java.time.Month.*;
 import java.util.Arrays;
 
 
 public class ResumeTestData {
     private static final OrganizationSection EDUCATION_SECTION = new OrganizationSection();
     private static final OrganizationSection EXPERIENCE_SECTION = new OrganizationSection();
-    private static final Organization SCHOOL = new Organization("School", "School", "school.com", LocalDate.of(1980, 9, 1), LocalDate.of(1988, 5, 31), "example");
-    private static final Organization JOB = new Organization("CompanyName", "link", "www.company.com", LocalDate.of(1994, 10, 1), LocalDate.of(1994, 12, 1), "example description");
+    private static final Organization SCHOOL = new Organization("School", "school.com",
+            new Organization.Period(2002, SEPTEMBER,2014,MAY,"student",""));
+    private static final Organization JOB = new Organization("CompanyName", "site.com",
+            new Organization.Period(2016, SEPTEMBER,2019,MAY,"Engineer","Machine engineer"),
+            new Organization.Period(2019, MAY,"Chief engineer","Chief engineer"));
 
 
     public static Resume getResume(String uuid, String name) {

@@ -20,6 +20,10 @@ public class Link implements Serializable {
         this.url = url;
     }
 
+    public Link(String url) {
+        this(url, url);
+    }
+
     @Override
     public String toString() {
         return name + " URL: " + url;
