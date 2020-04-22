@@ -1,18 +1,25 @@
 package com.basejava.webapp.model;
 
+import com.basejava.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-
-    private final Link homePage;
-    private final String title;
     private final List<Period> periods = new ArrayList<>();
+    private Link homePage;
+    private String title;
 
+    public Organization() {
+    }
 
     public Organization(String title, String urlName, String url, LocalDate startTime, LocalDate endTime, String description) {
         this.homePage = new Link(urlName, url);
@@ -56,12 +63,17 @@ public class Organization implements Serializable {
                 '}';
     }
 
-    public static class Period implements Serializable{
+    @XmlAccessorType(XmlAccessType.FIELD)
+    public static class Period implements Serializable {
         private static final long serialVersionUID = 1L;
+        private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endTime;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startTime;
 
-        private final String description;
-        private final LocalDate startTime;
-        private final LocalDate endTime;
+        public Period() {
+        }
 
         private Period(LocalDate startTime, LocalDate endTime, String description) {
             this.startTime = startTime;

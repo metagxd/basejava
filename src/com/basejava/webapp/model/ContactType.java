@@ -10,14 +10,13 @@ public enum ContactType {
     STACKOVERFLOW("Профиль Stackoverflow"),
     HOME_PAGE("Домашняя страница");
 
-    private final String type;
+    private final String title;
 
-    ContactType(String type) {
-        this.type = type;
+    ContactType(String title) {
+        this.title = title;
     }
 
-    @Override
-    public String toString() {
-        return type;
+    public String getTitle() {
+        return title;
     }
 }

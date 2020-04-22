@@ -1,5 +1,8 @@
 package com.basejava.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
@@ -9,11 +12,13 @@ import java.util.UUID;
 /**
  * Initial resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String uuid;
-    private final String fullName;
+    private String uuid;
+    private String fullName;
     private final Map<ContactType, Object> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, Object> sections = new EnumMap<>(SectionType.class);
 
@@ -26,6 +31,9 @@ public class Resume implements Comparable<Resume>, Serializable {
         this.fullName = fullName;
     }
 
+    public Resume() {
+    }
+
     public void addContact(ContactType contactType, Object contactInformation) {
         Objects.requireNonNull(contactType, "contactType can't be null!");
         this.contacts.put(contactType, contactInformation);
@@ -34,16 +42,6 @@ public class Resume implements Comparable<Resume>, Serializable {
     public void addSection(SectionType sectionType, Object object) {
         Objects.requireNonNull(sectionType, "SectionType can't be null!");
         this.sections.put(sectionType, object);
-    }
-
-    public Object getContact(ContactType contactType) {
-        Objects.requireNonNull(contactType, "ContactType can't be null!");
-        return contacts.get(contactType);
-    }
-
-    public Object getSection(SectionType sectionType) {
-        Objects.requireNonNull(sectionType, "SectionType can't be null!");
-        return sections.get(sectionType);
     }
 
     public String getFullName() {

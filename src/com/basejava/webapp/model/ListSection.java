@@ -5,8 +5,10 @@ import java.util.Objects;
 
 public class ListSection extends Section {
     private static final long serialVersionUID = 1L;
+    private List<String> items;
 
-    List<String> items;
+    public ListSection() {
+    }
 
     public ListSection(List<String> items) {
         this.items = items;

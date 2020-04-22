@@ -9,6 +9,9 @@ public class OrganizationSection extends Section {
 
     private final Map<String, Organization> organizations = new HashMap<>();
 
+    public OrganizationSection() {
+    }
+
     public void addOrganization(Organization organization) {
         if (organizations.containsKey(organization.getTitle())) {
             organizations.get(organization.getTitle()).addPeriods(organization.getPeriods());

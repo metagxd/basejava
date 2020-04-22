@@ -17,7 +17,7 @@ public class MainFile {
             if (file.isFile()) {
                 System.out.println(file.getName());
             } else {
-                System.out.println("["+file.getName()+"]");
+                System.out.println("[" + file.getName() + "]");
                 fileListener(file, level + 1);
             }
         }
