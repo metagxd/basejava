@@ -24,8 +24,8 @@ public class Organization implements Serializable {
     public Organization() {
     }
 
-    public Organization(String title, String url, Period... periods) {
-        this.homePage = new Link(url);
+    public Organization(String title, Link url, Period... periods) {
+        this.homePage = url;
         this.title = title;
         this.periods.addAll(Arrays.asList(periods));
     }
