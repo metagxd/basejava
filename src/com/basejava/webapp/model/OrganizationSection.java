@@ -20,6 +20,10 @@ public class OrganizationSection extends Section {
         this.organizations.put(organization.getTitle(), organization);
     }
 
+    public Map<String, Organization> getOrganizations() {
+        return organizations;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

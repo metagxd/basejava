@@ -17,9 +17,9 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final List<Period> periods = new ArrayList<>();
-    private Link homePage;
     private String title;
+    private Link homePage;
+    private final List<Period> periods = new ArrayList<>();
 
     public Organization() {
     }
@@ -32,6 +32,10 @@ public class Organization implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public Link getHomePage() {
+        return homePage;
     }
 
     public void addPeriods(List<Period> periods) {
@@ -47,21 +51,21 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(homePage, that.homePage) &&
-                title.equals(that.title) &&
+        return title.equals(that.title) &&
+                homePage.equals(that.homePage) &&
                 periods.equals(that.periods);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(homePage, title, periods);
+        return Objects.hash(title, homePage, periods);
     }
 
     @Override
     public String toString() {
         return "Organization{" +
-                "homePage=" + homePage +
-                ", title='" + title + '\'' +
+                "title='" + title + '\'' +
+                ", homePage=" + homePage +
                 ", periods=" + periods +
                 '}';
     }
@@ -94,15 +98,31 @@ public class Organization implements Serializable {
             this.position = position;
         }
 
+        public LocalDate getStartTime() {
+            return startTime;
+        }
+
+        public LocalDate getEndTime() {
+            return endTime;
+        }
+
+        public String getPosition() {
+            return position;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Period period = (Period) o;
             return startTime.equals(period.startTime) &&
-                    Objects.equals(endTime, period.endTime) &&
+                    endTime.equals(period.endTime) &&
                     position.equals(period.position) &&
-                    description.equals(period.description);
+                    Objects.equals(description, period.description);
         }
 
         @Override
@@ -112,7 +132,12 @@ public class Organization implements Serializable {
 
         @Override
         public String toString() {
-            return startTime.toString() + endTime.toString() + description;
+            return "Period{" +
+                    "startTime=" + startTime +
+                    ", endTime=" + endTime +
+                    ", position='" + position + '\'' +
+                    ", description='" + description + '\'' +
+                    '}';
         }
     }
 }

@@ -10,6 +10,10 @@ public class ListSection extends Section {
     public ListSection() {
     }
 
+    public List<String> getItems() {
+        return items;
+    }
+
     public ListSection(List<String> items) {
         this.items = items;
     }

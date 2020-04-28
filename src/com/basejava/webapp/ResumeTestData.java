@@ -14,12 +14,13 @@ public class ResumeTestData {
     private static final Organization JOB = new Organization("CompanyName", "site.com",
             new Organization.Period(2016, SEPTEMBER,2019,MAY,"Engineer","Machine engineer"),
             new Organization.Period(2019, MAY,"Chief engineer","Chief engineer"));
-
+    static {
+        EDUCATION_SECTION.addOrganization(SCHOOL);
+        EXPERIENCE_SECTION.addOrganization(JOB);
+    }
 
     public static Resume getResume(String uuid, String name) {
         Resume resume = new Resume(uuid, name);
-        EDUCATION_SECTION.addOrganization(SCHOOL);
-        EXPERIENCE_SECTION.addOrganization(JOB);
         resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
         resume.addSection(SectionType.OBJECTIVE, new TextSection("objective example"));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("achievement1", "achievement2")));
