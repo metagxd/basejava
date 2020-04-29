@@ -5,6 +5,6 @@ import com.basejava.webapp.storage.SerializationStrategy.ObjectStreamSerializati
 public class ObjectFileStorageTest extends AbstractStorageTest {
 
     public ObjectFileStorageTest() {
-        super(new FileStorage(STORAGE_DIRECTORY,new ObjectStreamSerialization()));
+        super(new FileStorage(STORAGE_DIRECTORY, new ObjectStreamSerialization()));
     }
 }

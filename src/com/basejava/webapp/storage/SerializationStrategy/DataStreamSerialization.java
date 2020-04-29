@@ -21,6 +21,7 @@ public class DataStreamSerialization implements SerializationStrategy {
                 dataOutputStream.writeUTF(entry.getKey().name());
                 dataOutputStream.writeUTF(entry.getValue());
             }
+            dataOutputStream.writeInt(resume.getSections().size());
             for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
                 SectionType sectionType = entry.getKey();
                 dataOutputStream.writeUTF(sectionType.name());
@@ -50,27 +51,22 @@ public class DataStreamSerialization implements SerializationStrategy {
             for (int i = 0; i < contactSize; i++) {
                 resume.addContact(ContactType.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF());
             }
-
-            for (int i = 0; i < SectionType.values().length; i++) {
+            int quantityOfSections = dataInputStream.readInt();
+            for (int i = 0; i < quantityOfSections; i++) {
                 SectionType sectionType = SectionType.valueOf(dataInputStream.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
-                        resume.addSection(SectionType.PERSONAL, new TextSection(dataInputStream.readUTF()));
-                        break;
                     case OBJECTIVE:
-                        resume.addSection(SectionType.OBJECTIVE, new TextSection(dataInputStream.readUTF()));
+                        resume.addSection(sectionType, new TextSection(dataInputStream.readUTF()));
                         break;
                     case ACHIEVEMENT:
-                        resume.addSection(SectionType.ACHIEVEMENT, new ListSection(listReader(dataInputStream)));
-                        break;
                     case QUALIFICATIONS:
-                        resume.addSection(SectionType.QUALIFICATIONS, new ListSection(listReader(dataInputStream)));
+                        resume.addSection(sectionType, new ListSection(listReader(dataInputStream)));
                         break;
                     case EXPERIENCE:
-                        resume.addSection(SectionType.EXPERIENCE, organizationSectionReader(dataInputStream));
-                        break;
                     case EDUCATION:
-                        resume.addSection(SectionType.EDUCATION, organizationSectionReader(dataInputStream));
+                        resume.addSection(sectionType, organizationSectionReader(dataInputStream));
+                        break;
                 }
             }
             return resume;

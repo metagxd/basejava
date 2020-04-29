@@ -12,7 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 
 public abstract class AbstractStorageTest {
@@ -71,7 +72,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void get(){
+    public void get() {
         assertGet(resume1);
         assertGet(resume3);
         assertGet(resume2);
