@@ -9,11 +9,11 @@ import java.util.Arrays;
 public class ResumeTestData {
     private static final OrganizationSection EDUCATION_SECTION = new OrganizationSection();
     private static final OrganizationSection EXPERIENCE_SECTION = new OrganizationSection();
-    private static final Organization SCHOOL = new Organization("School", new Link("School Site","school.com"),
+    private static final Organization SCHOOL = new Organization("School", null,
             new Organization.Period(2002, SEPTEMBER,2014,MAY,"student",""));
-    private static final Organization JOB = new Organization("CompanyName", new Link("Job Site","job.com"),
-            new Organization.Period(2016, SEPTEMBER,2019,MAY,"Engineer","Machine engineer"),
-            new Organization.Period(2019, MAY,"Chief engineer","Chief engineer"));
+    private static final Organization JOB = new Organization("CompanyName", new Link("Job Site", "job.com"),
+            new Organization.Period(2016, SEPTEMBER, 2019, MAY, "Engineer", "Machine engineer"),
+            new Organization.Period(2019, MAY, "Chief engineer", null));
     static {
         EDUCATION_SECTION.addOrganization(SCHOOL);
         EXPERIENCE_SECTION.addOrganization(JOB);

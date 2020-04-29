@@ -92,15 +92,26 @@ public class DataStreamSerialization implements SerializationStrategy {
     }
 
     private void linkWriter(Link link, DataOutputStream dataOutputStream) throws IOException {
+        if (link == null) {
+            dataOutputStream.writeBoolean(false);
+            return;
+        } else {
+            dataOutputStream.writeBoolean(true);
+        }
         dataOutputStream.writeUTF(link.getName());
         dataOutputStream.writeUTF(link.getUrl());
     }
 
     private void periodWriter(Organization.Period period, DataOutputStream dataOutputStream) throws IOException {
+        if (period.getDescription() != null) {
+            dataOutputStream.writeBoolean(true);
+            dataOutputStream.writeUTF(period.getDescription());
+        } else {
+            dataOutputStream.writeBoolean(false);
+        }
         dateWriter(period.getStartTime(), dataOutputStream);
         dateWriter(period.getEndTime(), dataOutputStream);
         dataOutputStream.writeUTF(period.getPosition());
-        dataOutputStream.writeUTF(period.getDescription());
     }
 
     private void dateWriter(LocalDate date, DataOutputStream dataOutputStream) throws IOException {
@@ -143,13 +154,24 @@ public class DataStreamSerialization implements SerializationStrategy {
         int periodSize = dataInputStream.readInt();
         List<Organization.Period> periods = new ArrayList<>();
         for (int i = 0; i < periodSize; i++) {
-            periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
-                    dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF(), dataInputStream.readUTF()));
+            boolean isDescriptionExist = dataInputStream.readBoolean();
+            if (isDescriptionExist) {
+                String description = dataInputStream.readUTF();
+                periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
+                        dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF(), description));
+            } else {
+                periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
+                        dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF()));
+            }
         }
         return periods;
     }
 
     private Link linkReader(DataInputStream dataInputStream) throws IOException {
-        return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
+        boolean isLinkExist = dataInputStream.readBoolean();
+        if (isLinkExist) {
+            return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
+        }
+        return null;
     }
 }

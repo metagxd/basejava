@@ -17,9 +17,9 @@ import java.util.Objects;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
+    private final List<Period> periods = new ArrayList<>();
     private String title;
     private Link homePage;
-    private final List<Period> periods = new ArrayList<>();
 
     public Organization() {
     }
@@ -51,14 +51,14 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return title.equals(that.title) &&
-                homePage.equals(that.homePage) &&
-                periods.equals(that.periods);
+        return periods.equals(that.periods) &&
+                title.equals(that.title) &&
+                Objects.equals(homePage, that.homePage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, homePage, periods);
+        return Objects.hash(periods, title, homePage);
     }
 
     @Override
@@ -85,6 +85,9 @@ public class Organization implements Serializable {
 
         public Period(int startYear, Month startMonth, int endYear, Month endMonth, String position, String description) {
             this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), position, description);
+        }
+        public Period(int startYear, Month startMonth, int endYear, Month endMonth, String position) {
+            this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), position, null);
         }
 
         public Period(int startYear, Month startMonth, String position, String description) {
