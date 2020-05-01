@@ -6,8 +6,8 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataStreamSerialization implements SerializationStrategy {
 
@@ -16,30 +16,44 @@ public class DataStreamSerialization implements SerializationStrategy {
         try (DataOutputStream dataOutputStream = new DataOutputStream(outputStream)) {
             dataOutputStream.writeUTF(resume.getUuid());
             dataOutputStream.writeUTF(resume.getFullName());
-            dataOutputStream.writeInt(resume.getContacts().size());
-            for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
-                dataOutputStream.writeUTF(entry.getKey().name());
-                dataOutputStream.writeUTF(entry.getValue());
-            }
-            dataOutputStream.writeInt(resume.getSections().size());
-            for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
-                SectionType sectionType = entry.getKey();
+
+            collectionWriter(dataOutputStream, resume.getContacts().entrySet(), item -> {
+                dataOutputStream.writeUTF(item.getKey().name());
+                dataOutputStream.writeUTF(item.getValue());
+            });
+
+            collectionWriter(dataOutputStream, resume.getSections().entrySet(), item -> {
+                SectionType sectionType = item.getKey();
+                Section section = item.getValue();
                 dataOutputStream.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        dataOutputStream.writeUTF(entry.getValue().toString());
+                        dataOutputStream.writeUTF(section.toString());
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        listWriter((ListSection) entry.getValue(), dataOutputStream);
+                        collectionWriter(dataOutputStream, ((ListSection) section).getItems(), dataOutputStream::writeUTF);
                         break;
                     case EDUCATION:
                     case EXPERIENCE:
-                        organizationSectionWriter((OrganizationSection) entry.getValue(), dataOutputStream);
+                        collectionWriter(dataOutputStream, ((OrganizationSection) section).getOrganizations().entrySet(), organization -> {
+                            dataOutputStream.writeUTF(organization.getValue().getTitle());
+                            linkWriter(organization.getValue().getHomePage(), dataOutputStream);
+                            collectionWriter(dataOutputStream, organization.getValue().getPeriods(), period -> {
+                                dateWriter(period.getStartTime(), dataOutputStream);
+                                dateWriter(period.getEndTime(), dataOutputStream);
+                                dataOutputStream.writeUTF(period.getPosition());
+                                if (period.getDescription() == null) {
+                                    dataOutputStream.writeUTF("");
+                                } else {
+                                    dataOutputStream.writeUTF(period.getDescription());
+                                }
+                            });
+                        });
                         break;
                 }
-            }
+            });
         }
     }
 
@@ -73,24 +87,6 @@ public class DataStreamSerialization implements SerializationStrategy {
         }
     }
 
-    private void organizationSectionWriter(OrganizationSection organizationSection, DataOutputStream dataOutputStream) throws IOException {
-        Map<String, Organization> organizations = organizationSection.getOrganizations();
-        dataOutputStream.writeInt(organizations.size());
-        for (Map.Entry<String, Organization> organizationsEntry : organizations.entrySet()) {
-            organizationWriter(organizationsEntry.getValue(), dataOutputStream);
-        }
-    }
-
-    private void organizationWriter(Organization organization, DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeUTF(organization.getTitle());
-        linkWriter(organization.getHomePage(), dataOutputStream);
-        List<Organization.Period> periods = organization.getPeriods();
-        dataOutputStream.writeInt(periods.size());
-        for (Organization.Period period : periods) {
-            periodWriter(period, dataOutputStream);
-        }
-    }
-
     private void linkWriter(Link link, DataOutputStream dataOutputStream) throws IOException {
         if (link == null) {
             dataOutputStream.writeBoolean(false);
@@ -102,28 +98,9 @@ public class DataStreamSerialization implements SerializationStrategy {
         dataOutputStream.writeUTF(link.getUrl());
     }
 
-    private void periodWriter(Organization.Period period, DataOutputStream dataOutputStream) throws IOException {
-        if (period.getDescription() != null) {
-            dataOutputStream.writeBoolean(true);
-            dataOutputStream.writeUTF(period.getDescription());
-        } else {
-            dataOutputStream.writeBoolean(false);
-        }
-        dateWriter(period.getStartTime(), dataOutputStream);
-        dateWriter(period.getEndTime(), dataOutputStream);
-        dataOutputStream.writeUTF(period.getPosition());
-    }
-
     private void dateWriter(LocalDate date, DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeInt(date.getYear());
         dataOutputStream.writeUTF(String.valueOf(date.getMonth()));
-    }
-
-    private void listWriter(ListSection listSection, DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeInt(listSection.getItems().size());
-        for (String string : listSection.getItems()) {
-            dataOutputStream.writeUTF(string);
-        }
     }
 
     private List<String> listReader(DataInputStream dataInputStream) throws IOException {
@@ -154,15 +131,8 @@ public class DataStreamSerialization implements SerializationStrategy {
         int periodSize = dataInputStream.readInt();
         List<Organization.Period> periods = new ArrayList<>();
         for (int i = 0; i < periodSize; i++) {
-            boolean isDescriptionExist = dataInputStream.readBoolean();
-            if (isDescriptionExist) {
-                String description = dataInputStream.readUTF();
-                periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
-                        dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF(), description));
-            } else {
-                periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
-                        dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF()));
-            }
+            periods.add(new Organization.Period(dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()),
+                    dataInputStream.readInt(), Month.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF(), dataInputStream.readUTF()));
         }
         return periods;
     }
@@ -173,5 +143,17 @@ public class DataStreamSerialization implements SerializationStrategy {
             return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
         }
         return null;
+    }
+
+    private <T> void collectionWriter(DataOutputStream dataOutputStream, Collection<T> collection, Writer<T> writer) throws IOException {
+        dataOutputStream.writeInt(collection.size());
+        for (T item : collection) {
+            writer.write(item);
+        }
+    }
+
+    @FunctionalInterface
+    private interface Writer<T> {
+        void write(T item) throws IOException;
     }
 }

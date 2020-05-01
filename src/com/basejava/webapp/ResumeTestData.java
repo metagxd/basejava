@@ -13,7 +13,7 @@ public class ResumeTestData {
             new Organization.Period(2002, SEPTEMBER,2014,MAY,"student",""));
     private static final Organization JOB = new Organization("CompanyName", new Link("Job Site", "job.com"),
             new Organization.Period(2016, SEPTEMBER, 2019, MAY, "Engineer", "Machine engineer"),
-            new Organization.Period(2019, MAY, "Chief engineer", null));
+            new Organization.Period(2019, MAY, "Chief engineer", ""));
     static {
         EDUCATION_SECTION.addOrganization(SCHOOL);
         EXPERIENCE_SECTION.addOrganization(JOB);
