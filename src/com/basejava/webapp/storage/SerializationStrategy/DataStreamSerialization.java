@@ -88,14 +88,10 @@ public class DataStreamSerialization implements SerializationStrategy {
     }
 
     private void linkWriter(Link link, DataOutputStream dataOutputStream) throws IOException {
-        if (link == null) {
-            dataOutputStream.writeBoolean(false);
-            return;
-        } else {
-            dataOutputStream.writeBoolean(true);
-        }
         dataOutputStream.writeUTF(link.getName());
-        dataOutputStream.writeUTF(link.getUrl());
+        if (link.getUrl() == null) {
+            dataOutputStream.writeUTF("");
+        } else dataOutputStream.writeUTF(link.getUrl());
     }
 
     private void dateWriter(LocalDate date, DataOutputStream dataOutputStream) throws IOException {
@@ -138,11 +134,7 @@ public class DataStreamSerialization implements SerializationStrategy {
     }
 
     private Link linkReader(DataInputStream dataInputStream) throws IOException {
-        boolean isLinkExist = dataInputStream.readBoolean();
-        if (isLinkExist) {
-            return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
-        }
-        return null;
+        return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
     }
 
     private <T> void collectionWriter(DataOutputStream dataOutputStream, Collection<T> collection, Writer<T> writer) throws IOException {
