@@ -30,6 +30,12 @@ public class Organization implements Serializable {
         this.periods.addAll(Arrays.asList(periods));
     }
 
+    public Organization(String title, Link url, List<Period> periods) {
+        this.homePage = url;
+        this.title = title;
+        this.periods.addAll(periods);
+    }
+
     public String getTitle() {
         return title;
     }
