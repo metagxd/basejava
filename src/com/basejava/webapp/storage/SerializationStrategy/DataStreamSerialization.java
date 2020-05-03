@@ -63,78 +63,41 @@ public class DataStreamSerialization implements SerializationStrategy {
         try (DataInputStream dataInputStream = new DataInputStream(inputStream)) {
             Resume resume = new Resume(dataInputStream.readUTF(), dataInputStream.readUTF());
 
-            collectionReader(dataInputStream, inputData ->
-                    resume.addContact(ContactType.valueOf(inputData.readUTF()), inputData.readUTF()));
+            collectionReader(dataInputStream, () ->
+                    resume.addContact(ContactType.valueOf(dataInputStream.readUTF()), dataInputStream.readUTF()));
 
-            collectionReader(dataInputStream, dataInputStream1 -> {
-                SectionType sectionType = SectionType.valueOf(dataInputStream1.readUTF());
+            collectionReader(dataInputStream, () -> {
+                SectionType sectionType = SectionType.valueOf(dataInputStream.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        resume.addSection(sectionType, new TextSection(dataInputStream1.readUTF()));
+                        resume.addSection(sectionType, new TextSection(dataInputStream.readUTF()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        resume.addSection(sectionType, new ListSection(listReader(dataInputStream1, DataInput::readUTF)));
+                        resume.addSection(sectionType, new ListSection(listReader(dataInputStream, dataInputStream::readUTF)));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        resume.addSection(sectionType, organizationSectionReader(dataInputStream1, dataInputStream2 ->
-                                new Organization(dataInputStream2.readUTF(), linkReader(dataInputStream2),
-                                        listReader(dataInputStream2, dataInputStream3 -> new Organization.Period(
-                                                dataInputStream3.readInt(),
-                                                Month.valueOf(dataInputStream3.readUTF()),
-                                                dataInputStream3.readInt(),
-                                                Month.valueOf(dataInputStream3.readUTF()),
-                                                dataInputStream3.readUTF(),
-                                                dataInputStream3.readUTF()
-                                        )))));
+                        OrganizationSection organizationSection = new OrganizationSection();
+                        organizationSection.addListOfOrganization(listReader(dataInputStream, () ->
+                                new Organization(dataInputStream.readUTF(),
+                                        linkReader(dataInputStream),
+                                        listReader(dataInputStream, () ->
+                                                new Organization.Period(
+                                                        dataInputStream.readInt(),
+                                                        Month.valueOf(dataInputStream.readUTF()),
+                                                        dataInputStream.readInt(),
+                                                        Month.valueOf(dataInputStream.readUTF()),
+                                                        dataInputStream.readUTF(),
+                                                        dataInputStream.readUTF()
+                                                )))));
+                        resume.addSection(sectionType, organizationSection);
                         break;
                 }
             });
             return resume;
         }
-    }
-
-    private void collectionReader(DataInputStream dataInputStream, Reader reader) throws IOException {
-        int collectionSize = dataInputStream.readInt();
-        for (int i = 0; i < collectionSize; i++) {
-            reader.read(dataInputStream);
-        }
-    }
-
-    private <T> List<T> listReader(DataInputStream dataInputStream, SectionReader<T> sectionReader) throws IOException {
-        List<T> list = new ArrayList<>();
-        int listSize = dataInputStream.readInt();
-        for (int i = 0; i < listSize; i++) {
-            list.add(sectionReader.read(dataInputStream));
-        }
-        return list;
-    }
-
-    private OrganizationSection organizationSectionReader(DataInputStream dataInputStream, SectionReader<Organization> organizationSectionReader) throws IOException {
-        OrganizationSection organizationSection = new OrganizationSection();
-        int quantityOfOrganization = dataInputStream.readInt();
-        for (int i = 0; i < quantityOfOrganization; i++) {
-            organizationSection.addOrganization(organizationSectionReader.read(dataInputStream));
-        }
-        return organizationSection;
-    }
-
-    private void linkWriter(Link link, DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeUTF(link.getName());
-        if (link.getUrl() == null) {
-            dataOutputStream.writeUTF("");
-        } else dataOutputStream.writeUTF(link.getUrl());
-    }
-
-    private void dateWriter(LocalDate date, DataOutputStream dataOutputStream) throws IOException {
-        dataOutputStream.writeInt(date.getYear());
-        dataOutputStream.writeUTF(String.valueOf(date.getMonth()));
-    }
-
-    private Link linkReader(DataInputStream dataInputStream) throws IOException {
-        return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
     }
 
     private <T> void collectionWriter(DataOutputStream dataOutputStream, Collection<T> collection, Writer<T> writer) throws IOException {
@@ -144,18 +107,52 @@ public class DataStreamSerialization implements SerializationStrategy {
         }
     }
 
-    @FunctionalInterface
-    private interface Reader {
-        void read(DataInputStream dataInputStream) throws IOException;
+    private void collectionReader(DataInputStream dataInputStream, Reader reader) throws IOException {
+        int collectionSize = dataInputStream.readInt();
+        for (int i = 0; i < collectionSize; i++) {
+            reader.read();
+        }
     }
 
-    @FunctionalInterface
-    private interface SectionReader<T> {
-        T read(DataInputStream dataInputStream) throws IOException;
+    private <T> List<T> listReader(DataInputStream dataInputStream, SectionReader<T> sectionReader) throws IOException {
+        List<T> list = new ArrayList<>();
+        int listSize = dataInputStream.readInt();
+        for (int i = 0; i < listSize; i++) {
+            list.add(sectionReader.read());
+        }
+        return list;
+    }
+
+    private void linkWriter(Link link, DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeUTF(link.getName());
+        if (link.getUrl() == null) {
+            dataOutputStream.writeUTF("");
+        } else dataOutputStream.writeUTF(link.getUrl());
+    }
+
+    private Link linkReader(DataInputStream dataInputStream) throws IOException {
+        return new Link(dataInputStream.readUTF(), dataInputStream.readUTF());
+    }
+
+    private void dateWriter(LocalDate date, DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeInt(date.getYear());
+        dataOutputStream.writeUTF(String.valueOf(date.getMonth()));
     }
 
     @FunctionalInterface
     private interface Writer<T> {
         void write(T item) throws IOException;
+    }
+
+    @FunctionalInterface
+    private interface Reader {
+        void read() throws IOException;
+
+    }
+
+    @FunctionalInterface
+    private interface SectionReader<T> {
+        T read() throws IOException;
+
     }
 }

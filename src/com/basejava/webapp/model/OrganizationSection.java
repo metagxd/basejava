@@ -1,6 +1,7 @@
 package com.basejava.webapp.model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -18,6 +19,12 @@ public class OrganizationSection extends Section {
             return;
         }
         this.organizations.put(organization.getTitle(), organization);
+    }
+
+    public void addListOfOrganization(List<Organization> organizationList) {
+        for (Organization organization : organizationList) {
+            this.addOrganization(organization);
+        }
     }
 
     public Map<String, Organization> getOrganizations() {
