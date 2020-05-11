@@ -34,6 +34,6 @@ public class MainDeadLock {
         });
 
         thread0.start();
-        thread1.start();
+        thread1.start();  
     }
 }
