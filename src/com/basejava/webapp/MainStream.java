@@ -3,6 +3,7 @@ package com.basejava.webapp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class MainStream {
 
@@ -22,17 +23,17 @@ public class MainStream {
     }
 
     static List<Integer> oddOrEven(int[] values) {
-        if (Arrays.stream(values)
-                .sum() % 2 == 0) {
-            return Arrays.stream(values)
-                    .sorted()
-                    .filter(x -> x % 2 == 0)
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+        IntStream stream = Arrays.stream(values).sorted();
+        IntStream resultStream;
+        int sumOfStream = Arrays.stream(values).sum();
+
+        if (sumOfStream % 2 == 0) {
+            resultStream = stream
+                    .filter(x -> x % 2 == 0);
         } else {
-            return Arrays.stream(values)
-                    .filter(x -> x % 2 != 0)
-                    .sorted()
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
+            resultStream = stream
+                    .filter(x -> x % 2 != 0);
         }
+        return resultStream.collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
     }
 }
