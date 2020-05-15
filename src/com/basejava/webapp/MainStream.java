@@ -8,7 +8,7 @@ public class MainStream {
 
     public static void main(String[] args) {
         int[] values = new int[]{1, 3, 1, 1, 1, 1, 1, 3, 2, 3, 1, 1, 1, 3, 3, 3, 3, 3, 2, 2, 1, 3};
-        int[] values2 = new int[]{1, 4, 8, 6, 9, 3, 1};
+        int[] values2 = new int[]{1, 4, 8, 6, 9, 3};
         System.out.println(minValue(values));
         System.out.println(oddOrEven(values2));
     }
@@ -26,7 +26,8 @@ public class MainStream {
         System.out.println(sumOfStream % 2);
 
         return Arrays.stream(values)
-                .filter((x) -> (sumOfStream % 2 != 0) && (x % 2 != 0) || (sumOfStream % 2 == 0) && (x % 2 == 0))
+                .filter((x) -> (sumOfStream % 2 != x % 2))
+                .distinct()
                 .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
 
     }

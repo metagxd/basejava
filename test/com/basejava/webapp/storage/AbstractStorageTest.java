@@ -1,5 +1,6 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.Config;
 import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
@@ -21,7 +22,7 @@ public abstract class AbstractStorageTest {
     protected static final Resume resume2 = (ResumeTestData.getResume("uuid2", "name2"));
     protected static final Resume resume3 = (ResumeTestData.getResume("uuid3", "name3"));
     protected static final Resume resume4 = (ResumeTestData.getResume("uuid4", "name4"));
-    protected static final File STORAGE_DIRECTORY = new File("C:\\basejava\\storage");
+    protected static final File STORAGE_DIRECTORY = Config.getInstance().getStorageDir();
     protected Storage storage;
 
     public AbstractStorageTest(Storage storage) {
