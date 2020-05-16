@@ -7,7 +7,8 @@ public class LazySingleton {
 
     private LazySingleton() {
     }
-//double check lock
+
+    //double check lock
     public static LazySingleton getInstance() {
         if (INSTANCE == null) {
             synchronized (LazySingleton.class) {

@@ -92,6 +92,7 @@ public class Organization implements Serializable {
         public Period(int startYear, Month startMonth, int endYear, Month endMonth, String position, String description) {
             this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), position, description);
         }
+
         public Period(int startYear, Month startMonth, int endYear, Month endMonth, String position) {
             this(DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth), position, "");
         }

@@ -24,6 +24,9 @@ public abstract class AbstractStorageTest {
     protected static final Resume resume4 = (ResumeTestData.getResume("uuid4", "name4"));
     protected static final File STORAGE_DIRECTORY = Config.getInstance().getStorageDir();
     protected Storage storage;
+    protected static final String dbUrl = Config.getInstance().getDbUrl();
+    protected static final String dbUser = Config.getInstance().getDbUser();
+    protected static final String dbPassword = Config.getInstance().getDbPassword();
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
