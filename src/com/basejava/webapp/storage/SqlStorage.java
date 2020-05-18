@@ -1,12 +1,10 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.sql.ConnectionFactory;
 import com.basejava.webapp.sql.SqlHelper;
-import org.postgresql.util.PSQLException;
 
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -44,11 +42,7 @@ public class SqlStorage implements Storage {
         sqlHelper.process("INSERT INTO resume (uuid, full_name) VALUES (?,?)", preparedStatement -> {
             preparedStatement.setString(1, resume.getUuid());
             preparedStatement.setString(2, resume.getFullName());
-            try {
-                preparedStatement.execute();
-            } catch (PSQLException e) {
-                throw new ExistStorageException(resume.getUuid(), e);
-            }
+            preparedStatement.execute();
             return null;
         });
     }
