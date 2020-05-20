@@ -4,23 +4,24 @@ import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.sql.ConnectionFactory;
+import com.basejava.webapp.sql.ExceptionUtil;
 import com.basejava.webapp.sql.SqlHelper;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class SqlStorage implements Storage {
-    public final ConnectionFactory connectionFactory;
     private final SqlHelper sqlHelper;
 
 
     public SqlStorage(String dbUrl, String dbUser, String bdPassword) {
-        connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, bdPassword);
-        sqlHelper = new SqlHelper(connectionFactory);
+        sqlHelper = new SqlHelper(dbUrl, dbUser, bdPassword);
     }
 
     @Override
@@ -111,10 +112,13 @@ public class SqlStorage implements Storage {
             Map<String, Resume> resumeHashMap = new LinkedHashMap<>();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Resume resume = resumeHashMap.get(resultSet.getString("resume_uuid"));
-                if (resume == null) {
-                    resume = new Resume(resultSet.getString("resume_uuid"), resultSet.getString("full_name"));
-                }
+                Resume resume = resumeHashMap.computeIfAbsent(resultSet.getString("resume_uuid"), (k) -> {
+                    try {
+                        return new Resume(resultSet.getString("resume_uuid"), resultSet.getString("full_name"));
+                    } catch (SQLException e) {
+                        throw ExceptionUtil.convertException(e);
+                    }
+                });
                 readContact(resultSet, resume);
                 resumeHashMap.put(resume.getUuid(), resume);
             }
@@ -138,11 +142,8 @@ public class SqlStorage implements Storage {
 
     private void readContact(ResultSet resultSet, Resume resume) throws SQLException {
         String type = resultSet.getString("type");
-        ContactType contactType;
         if (type != null) {
-            contactType = ContactType.valueOf(type);
-            String contactValue = resultSet.getString("value");
-            resume.addContact(contactType, contactValue);
+            resume.addContact(ContactType.valueOf(type), resultSet.getString("value"));
         }
     }
 }

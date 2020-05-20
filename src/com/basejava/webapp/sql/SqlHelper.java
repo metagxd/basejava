@@ -1,14 +1,15 @@
 package com.basejava.webapp.sql;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class SqlHelper {
     private final ConnectionFactory connectionFactory;
 
-    public SqlHelper(ConnectionFactory connectionFactory) {
-        this.connectionFactory = connectionFactory;
+    public SqlHelper(String dbUrl, String dbUser, String bdPassword) {
+        this.connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, bdPassword);
     }
 
     public <T> T process(String sql, Statement<T> executor) {
