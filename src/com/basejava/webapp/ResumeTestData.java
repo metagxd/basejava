@@ -1,9 +1,6 @@
 package com.basejava.webapp;
 
-import com.basejava.webapp.model.Link;
-import com.basejava.webapp.model.Organization;
-import com.basejava.webapp.model.OrganizationSection;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 
 import static java.time.Month.MAY;
 import static java.time.Month.SEPTEMBER;
@@ -31,7 +28,8 @@ public class ResumeTestData {
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("qualification1", "qualification2")));
         resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
         resume.addSection(SectionType.EDUCATION, EDUCATION_SECTION);
-        resume.addContact(ContactType.PHONE, "8-800-000-00-00");
+        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));*/
+        //resume.addContact(ContactType.PHONE, "8-800-000-00-00");
         resume.addContact(ContactType.MOBILE, "8-800-000-00-00");
         resume.addContact(ContactType.SKYPE, "skype_example");
         resume.addContact(ContactType.LINKEDIN, "@example");
@@ -39,7 +37,13 @@ public class ResumeTestData {
         resume.addContact(ContactType.GITHUB, "github.com");
         resume.addContact(ContactType.STACKOVERFLOW, "www.site.com");
         resume.addContact(ContactType.HOME_PAGE,"www.site.com");
-        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));*/
+        return resume;
+    }
+
+    public static Resume getUpdatedResume(String uuid, String name) {
+        Resume resume = getResume(uuid, name);
+        resume.addContact(ContactType.PHONE, "8-850-666-88-91");
+        resume.addContact(ContactType.MAIL, "mailbox@mail.com");
         return resume;
     }
 }

@@ -1,8 +1,5 @@
 package com.basejava.webapp.sql;
 
-import com.basejava.webapp.exception.ExistStorageException;
-import com.basejava.webapp.exception.StorageException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,21 +11,39 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T process(String sql, Statement<T> statement) {
+    public <T> T process(String sql, Statement<T> executor) {
         try (Connection connection = connectionFactory.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            return statement.execute(preparedStatement);
+            return executor.execute(preparedStatement);
         } catch (SQLException e) {
-            if (e.getSQLState().equals("23505")) {
-                throw new ExistStorageException(e);
+            throw ExceptionUtil.convertException(e);
+        }
+    }
+
+    public <T> T transactionalExecute(SqlTransaction<T> executor) {
+        try (Connection connection = connectionFactory.getConnection()) {
+            try {
+                connection.setAutoCommit(false);
+                T result = executor.execute(connection);
+                connection.commit();
+                return result;
+            } catch (SQLException e) {
+                connection.rollback();
+                throw e;
             }
-            throw new StorageException("Process error, state: " + e.getSQLState(), e);
+        } catch (SQLException e) {
+           throw ExceptionUtil.convertException(e);
         }
     }
 
     @FunctionalInterface
     public interface Statement<T> {
         T execute(PreparedStatement preparedStatement) throws SQLException;
+    }
+
+    @FunctionalInterface
+    public interface SqlTransaction<T> {
+        T execute(Connection connection) throws SQLException;
     }
 
 }
