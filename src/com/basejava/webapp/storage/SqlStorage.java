@@ -4,7 +4,6 @@ import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.ContactType;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.sql.ExceptionUtil;
 import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.Connection;
@@ -112,13 +111,9 @@ public class SqlStorage implements Storage {
             Map<String, Resume> resumeHashMap = new LinkedHashMap<>();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Resume resume = resumeHashMap.computeIfAbsent(resultSet.getString("resume_uuid"), (k) -> {
-                    try {
-                        return new Resume(resultSet.getString("resume_uuid"), resultSet.getString("full_name"));
-                    } catch (SQLException e) {
-                        throw ExceptionUtil.convertException(e);
-                    }
-                });
+                String uuid = resultSet.getString("resume_uuid");
+                String name = resultSet.getString("full_name");
+                Resume resume = resumeHashMap.computeIfAbsent(uuid, (k) -> new Resume(uuid, name));
                 readContact(resultSet, resume);
                 resumeHashMap.put(resume.getUuid(), resume);
             }
