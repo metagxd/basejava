@@ -2,8 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.sql.SqlHelper;
 
 import java.sql.Connection;
@@ -47,6 +46,7 @@ public class SqlStorage implements Storage {
                 preparedStatement.execute();
             }
             writeContacts(resume, connection);
+            writeSections(resume, connection);
             return null;
         });
     }
@@ -133,6 +133,38 @@ public class SqlStorage implements Storage {
             }
             preparedStatement.executeBatch();
         }
+    }
+
+    private void writeSections(Resume resume, Connection connection) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO sections (resume_uuid, type, value) VALUES (?, ?, ?)")) {
+            for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
+                SectionType sectionType = entry.getKey();
+                preparedStatement.setString(1, resume.getUuid());
+                preparedStatement.setString(2, sectionType.name());
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        preparedStatement.setString(3, entry.getValue().toString());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection listSection = (ListSection) entry.getValue();
+                        StringBuilder sb = new StringBuilder();
+                        for (String item : listSection.getItems()) {
+                            sb.append(item).append("\n");
+                        }
+                        sb.deleteCharAt(sb.length() - 1);
+                        preparedStatement.setString(3, sb.toString());
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        break;
+                }
+                preparedStatement.addBatch();
+            }
+            preparedStatement.executeBatch();
+        }
+
     }
 
     private void readContact(ResultSet resultSet, Resume resume) throws SQLException {

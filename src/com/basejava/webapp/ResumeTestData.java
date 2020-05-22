@@ -2,6 +2,8 @@ package com.basejava.webapp;
 
 import com.basejava.webapp.model.*;
 
+import java.util.Arrays;
+
 import static java.time.Month.MAY;
 import static java.time.Month.SEPTEMBER;
 
@@ -22,14 +24,14 @@ public class ResumeTestData {
 
     public static Resume getResume(String uuid, String name) {
         Resume resume = new Resume(uuid, name);
-        /*resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
         resume.addSection(SectionType.OBJECTIVE, new TextSection("objective example"));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("achievement1", "achievement2")));
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("qualification1", "qualification2")));
-        resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
-        resume.addSection(SectionType.EDUCATION, EDUCATION_SECTION);
-        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));*/
-        //resume.addContact(ContactType.PHONE, "8-800-000-00-00");
+        /*resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
+        resume.addSection(SectionType.EDUCATION, EDUCATION_SECTION);*/
+        resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
+        resume.addContact(ContactType.PHONE, "8-800-000-00-00");
         resume.addContact(ContactType.MOBILE, "8-800-000-00-00");
         resume.addContact(ContactType.SKYPE, "skype_example");
         resume.addContact(ContactType.LINKEDIN, "@example");
