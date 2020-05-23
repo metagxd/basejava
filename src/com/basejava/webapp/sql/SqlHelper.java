@@ -1,5 +1,7 @@
 package com.basejava.webapp.sql;
 
+import com.basejava.webapp.exception.StorageException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,7 +11,12 @@ public class SqlHelper {
     private final ConnectionFactory connectionFactory;
 
     public SqlHelper(String dbUrl, String dbUser, String bdPassword) {
-        this.connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, bdPassword);
+        try {
+            Class.forName("org.postgresql.Driver");
+            this.connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, bdPassword);
+        } catch (ClassNotFoundException e) {
+            throw new StorageException("Sql connection error", e);
+        }
     }
 
     public <T> T process(String sql, Statement<T> executor) {
@@ -33,7 +40,7 @@ public class SqlHelper {
                 throw e;
             }
         } catch (SQLException e) {
-           throw ExceptionUtil.convertException(e);
+            throw ExceptionUtil.convertException(e);
         }
     }
 

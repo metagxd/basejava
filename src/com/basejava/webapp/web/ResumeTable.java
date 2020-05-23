@@ -20,6 +20,7 @@ public class ResumeTable extends HttpServlet {
     private static final Resume resume3 = ResumeTestData.getResume("uuid3", "name3");
 
     static {
+        storage.clear();
         storage.save(resume1);
         storage.save(resume2);
         storage.save(resume3);
