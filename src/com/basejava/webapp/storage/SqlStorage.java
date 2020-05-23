@@ -110,8 +110,10 @@ public class SqlStorage implements Storage {
         return sqlHelper.process("" +
                 "SELECT * FROM resume " +
                 "LEFT JOIN contact c " +
-                " ON resume.uuid = c.resume_uuid " +
-                " ORDER BY resume.uuid", preparedStatement -> {
+                "ON resume.uuid = c.resume_uuid " +
+                "LEFT JOIN sections " +
+                "ON resume.uuid = sections.resume_uuid "+
+                "ORDER BY resume.uuid", preparedStatement -> {
             Map<String, Resume> resumeHashMap = new LinkedHashMap<>();
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -119,6 +121,7 @@ public class SqlStorage implements Storage {
                 String name = resultSet.getString("full_name");
                 Resume resume = resumeHashMap.computeIfAbsent(uuid, (k) -> new Resume(uuid, name));
                 readContact(resultSet, resume);
+                readSections(resultSet, resume);
                 resumeHashMap.put(resume.getUuid(), resume);
             }
             return new ArrayList<>(resumeHashMap.values());
