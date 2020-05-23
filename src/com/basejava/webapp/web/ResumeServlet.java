@@ -11,6 +11,6 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws javax.servlet.ServletException, IOException {
-
+        response.getWriter().write("Hello Resumes!");
     }
 }

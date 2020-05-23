@@ -3,15 +3,24 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-
     <servlet>
         <servlet-name>resumeServlet</servlet-name>
         <servlet-class>
             com.basejava.webapp.web.ResumeServlet
         </servlet-class>
     </servlet>
+
+    <servlet>
+        <servlet-name>resumeTable</servlet-name>
+        <servlet-class>com.basejava.webapp.web.ResumeTable</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>resumeServlet</servlet-name>
         <url-pattern>/resume</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>resumeTable</servlet-name>
+        <url-pattern>/table</url-pattern>
     </servlet-mapping>
 </web-app>
