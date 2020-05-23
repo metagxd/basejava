@@ -1,8 +1,9 @@
 package com.basejava.webapp.web;
 
+import com.basejava.webapp.Config;
 import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.storage.ArrayStorage;
+import com.basejava.webapp.storage.SqlStorage;
 import com.basejava.webapp.storage.Storage;
 
 import javax.servlet.ServletException;
@@ -12,9 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResumeTable extends HttpServlet {
-    /*public static final Config config = Config.getInstance();
-    private static final SqlStorage storage = new SqlStorage(config.getDbUrl(), config.getDbUser(), config.getDbPassword());*/
-    private static final Storage storage = new ArrayStorage();
+    public static final Config config = Config.getInstance();
+    private static final Storage storage = new SqlStorage(config.getDbUrl(), config.getDbUser(), config.getDbPassword());
     private static final Resume resume1 = ResumeTestData.getResume("uuid1", "name1");
     private static final Resume resume2 = ResumeTestData.getResume("uuid2", "name2");
     private static final Resume resume3 = ResumeTestData.getResume("uuid3", "name3");
