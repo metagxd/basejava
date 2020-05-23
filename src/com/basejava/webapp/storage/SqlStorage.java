@@ -58,10 +58,9 @@ public class SqlStorage implements Storage {
                     throw new NotExistStorageException(resume.getUuid());
                 }
             }
-            //TODO write with 1 param
             try (PreparedStatement preparedStatement = connection.prepareStatement("" +
                     "DELETE FROM contact WHERE resume_uuid = ?; " +
-                    "DELETE FROM sections WHERE resume_uuid = ?")) {
+                    "DELETE FROM section WHERE resume_uuid = ?")) {
                 preparedStatement.setString(1, resume.getUuid());
                 preparedStatement.setString(2, resume.getUuid());
                 preparedStatement.execute();
@@ -78,7 +77,7 @@ public class SqlStorage implements Storage {
                 " SELECT * FROM resume r " +
                 "   LEFT JOIN contact c " +
                 "       ON r.uuid = c.resume_uuid " +
-                "LEFT JOIN sections s ON r.uuid = s.resume_uuid" +
+                "LEFT JOIN section s ON r.uuid = s.resume_uuid" +
                 " WHERE r.uuid = ? ", preparedStatement -> {
             preparedStatement.setString(1, uuid);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -107,24 +106,30 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
+        Map<String, Resume> resumes = sqlHelper.process("SELECT * FROM resume ORDER BY uuid", preparedStatement -> {
+            Map<String, Resume> resumeMap = new LinkedHashMap<>();
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String uuid = resultSet.getString("uuid");
+                String name = resultSet.getString("full_name");
+                resumeMap.put(uuid, new Resume(uuid, name));
+            }
+            return resumeMap;
+        });
+
         return sqlHelper.process("" +
-                "SELECT * FROM resume " +
-                "LEFT JOIN contact c " +
-                "ON resume.uuid = c.resume_uuid " +
-                "LEFT JOIN sections " +
-                "ON resume.uuid = sections.resume_uuid "+
-                "ORDER BY resume.uuid", preparedStatement -> {
-            Map<String, Resume> resumeHashMap = new LinkedHashMap<>();
+                "SELECT * FROM contact c " +
+                "LEFT JOIN section s " +
+                "ON c.resume_uuid = s.resume_uuid", preparedStatement -> {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 String uuid = resultSet.getString("resume_uuid");
-                String name = resultSet.getString("full_name");
-                Resume resume = resumeHashMap.computeIfAbsent(uuid, (k) -> new Resume(uuid, name));
-                readContact(resultSet, resume);
+                Resume resume = resumes.get(uuid);
                 readSections(resultSet, resume);
-                resumeHashMap.put(resume.getUuid(), resume);
+                readContact(resultSet, resume);
+                resumes.put(uuid, resume);
             }
-            return new ArrayList<>(resumeHashMap.values());
+            return new ArrayList<>(resumes.values());
         });
     }
 
@@ -141,7 +146,7 @@ public class SqlStorage implements Storage {
     }
 
     private void writeSections(Resume resume, Connection connection) throws SQLException {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO sections (resume_uuid, section_type, section_value) VALUES (?, ?, ?)")) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO section (resume_uuid, section_type, section_value) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
                 SectionType sectionType = entry.getKey();
                 preparedStatement.setString(1, resume.getUuid());
