@@ -159,12 +159,8 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ListSection listSection = (ListSection) entry.getValue();
-                        StringBuilder sb = new StringBuilder();
-                        for (String item : listSection.getItems()) {
-                            sb.append(item).append("\n");
-                        }
-                        sb.deleteCharAt(sb.length() - 1);
-                        preparedStatement.setString(3, sb.toString());
+                        String items = String.join("\n", listSection.getItems());
+                        preparedStatement.setString(3, items);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
