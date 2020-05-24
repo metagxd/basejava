@@ -1,4 +1,4 @@
-package com.basejava.webapp;
+package com.basejava.webapp.util;
 
 import com.basejava.webapp.model.*;
 
@@ -8,7 +8,7 @@ import static java.time.Month.MAY;
 import static java.time.Month.SEPTEMBER;
 
 
-public class ResumeTestData {
+public class ResumeDataUtil {
     private static final OrganizationSection EDUCATION_SECTION = new OrganizationSection();
     private static final OrganizationSection EXPERIENCE_SECTION = new OrganizationSection();
     private static final Organization SCHOOL = new Organization("School", new Link("school site", ""),
@@ -38,7 +38,7 @@ public class ResumeTestData {
         resume.addContact(ContactType.MAIL, "example@mail.com");
         resume.addContact(ContactType.GITHUB, "github.com");
         resume.addContact(ContactType.STACKOVERFLOW, "www.site.com");
-        resume.addContact(ContactType.HOME_PAGE,"www.site.com");
+        resume.addContact(ContactType.HOME_PAGE, "www.site.com");
         return resume;
     }
 
@@ -48,4 +48,6 @@ public class ResumeTestData {
         resume.addContact(ContactType.MAIL, "mailbox@mail.com");
         return resume;
     }
+
+
 }

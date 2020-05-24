@@ -1,10 +1,10 @@
 package com.basejava.webapp.storage;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.ResumeTestData;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.util.ResumeDataUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,10 +18,10 @@ import static org.junit.Assert.assertThat;
 
 
 public abstract class AbstractStorageTest {
-    protected static final Resume resume1 = (ResumeTestData.getResume("uuid1", "name1"));
-    protected static final Resume resume2 = (ResumeTestData.getResume("uuid2", "name2"));
-    protected static final Resume resume3 = (ResumeTestData.getResume("uuid3", "name3"));
-    protected static final Resume resume4 = (ResumeTestData.getResume("uuid4", "name4"));
+    protected static final Resume resume1 = (ResumeDataUtil.getResume("uuid1", "name1"));
+    protected static final Resume resume2 = (ResumeDataUtil.getResume("uuid2", "name2"));
+    protected static final Resume resume3 = (ResumeDataUtil.getResume("uuid3", "name3"));
+    protected static final Resume resume4 = (ResumeDataUtil.getResume("uuid4", "name4"));
     protected static final File STORAGE_DIRECTORY = Config.getInstance().getStorageDir();
     protected Storage storage;
     protected static final String dbUrl = Config.getInstance().getDbUrl();
@@ -65,7 +65,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume resume1 = ResumeTestData.getUpdatedResume("uuid1", "name4");
+        Resume resume1 = ResumeDataUtil.getUpdatedResume("uuid1", "name4");
         storage.update(resume1);
         assertEquals(resume1, storage.get("uuid1"));
     }

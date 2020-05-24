@@ -10,17 +10,8 @@
         </servlet-class>
     </servlet>
 
-    <servlet>
-        <servlet-name>resumeTable</servlet-name>
-        <servlet-class>com.basejava.webapp.web.ResumeTable</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>resumeServlet</servlet-name>
-        <url-pattern>/resume</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>resumeTable</servlet-name>
-        <url-pattern>/table</url-pattern>
+        <url-pattern>/resumes</url-pattern>
     </servlet-mapping>
 </web-app>
