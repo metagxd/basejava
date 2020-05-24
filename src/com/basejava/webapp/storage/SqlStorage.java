@@ -106,31 +106,37 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        Map<String, Resume> resumes = sqlHelper.process("SELECT * FROM resume ORDER BY uuid", preparedStatement -> {
+        return sqlHelper.transactionalExecute(connection -> {
             Map<String, Resume> resumeMap = new LinkedHashMap<>();
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("uuid");
-                String name = resultSet.getString("full_name");
-                resumeMap.put(uuid, new Resume(uuid, name));
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM resume ORDER BY uuid")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("uuid");
+                    String name = resultSet.getString("full_name");
+                    resumeMap.put(uuid, new Resume(uuid, name));
+                }
             }
-            return resumeMap;
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM contact")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("resume_uuid");
+                    Resume resume = resumeMap.get(uuid);
+                    readContact(resultSet, resume);
+                    resumeMap.put(uuid, resume);
+                }
+            }
+            try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM section")) {
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    String uuid = resultSet.getString("resume_uuid");
+                    Resume resume = resumeMap.get(uuid);
+                    readSections(resultSet, resume);
+                    resumeMap.put(uuid, resume);
+                }
+            }
+            return new ArrayList<>(resumeMap.values());
         });
 
-        return sqlHelper.process("" +
-                "SELECT * FROM contact c " +
-                "LEFT JOIN section s " +
-                "ON c.resume_uuid = s.resume_uuid", preparedStatement -> {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                String uuid = resultSet.getString("resume_uuid");
-                Resume resume = resumes.get(uuid);
-                readSections(resultSet, resume);
-                readContact(resultSet, resume);
-                resumes.put(uuid, resume);
-            }
-            return new ArrayList<>(resumes.values());
-        });
     }
 
     private void writeContacts(Resume resume, Connection connection) throws SQLException {
@@ -181,21 +187,24 @@ public class SqlStorage implements Storage {
     }
 
     private void readSections(ResultSet resultSet, Resume resume) throws SQLException {
-        SectionType type = SectionType.valueOf(resultSet.getString("section_type"));
-        switch (type) {
-            case PERSONAL:
-            case OBJECTIVE:
-                String value = resultSet.getString("section_value");
-                resume.addSection(type, new TextSection(value));
-                break;
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                String values = resultSet.getString("section_value");
-                resume.addSection(type, new ListSection(Arrays.asList(values.split("\n"))));
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-                break;
+        String type = resultSet.getString("section_type");
+        if (type != null) {
+            SectionType sectionType = SectionType.valueOf(type);
+            switch (sectionType) {
+                case PERSONAL:
+                case OBJECTIVE:
+                    String value = resultSet.getString("section_value");
+                    resume.addSection(sectionType, new TextSection(value));
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    String values = resultSet.getString("section_value");
+                    resume.addSection(sectionType, new ListSection(Arrays.asList(values.split("\n"))));
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    break;
+            }
         }
     }
 }
