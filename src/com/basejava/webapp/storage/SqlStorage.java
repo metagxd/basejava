@@ -122,7 +122,6 @@ public class SqlStorage implements Storage {
                     String uuid = resultSet.getString("resume_uuid");
                     Resume resume = resumeMap.get(uuid);
                     readContact(resultSet, resume);
-                    resumeMap.put(uuid, resume);
                 }
             }
             try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM section")) {
@@ -131,7 +130,6 @@ public class SqlStorage implements Storage {
                     String uuid = resultSet.getString("resume_uuid");
                     Resume resume = resumeMap.get(uuid);
                     readSections(resultSet, resume);
-                    resumeMap.put(uuid, resume);
                 }
             }
             return new ArrayList<>(resumeMap.values());

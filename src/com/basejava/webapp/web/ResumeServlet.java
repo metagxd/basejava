@@ -18,23 +18,25 @@ public class ResumeServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.getWriter().write("<style>" +
-                "table {border-collapse: collapse}" +
-                "table, th, td {padding: 3px; border: 1px solid black}" +
-                "</style>" +
-                "<table> " +
-                "<tr>" +
-                "<th>uuid</th>" +
-                "<th>First Name</th>" +
-                "</tr>"
-        );
-        for (Resume resume : storage.getAllSorted()) {
-            response.getWriter().write("" +
-                    "<tr>" +
-                    "<td>" + resume.getUuid() + "</td>" +
-                    "<td>" + resume.getFullName() + "</td>" +
-                    "</tr>");
+        String uuid = request.getParameter("uuid");
+        String action = request.getParameter("action");
+        Resume resume;
+        if (action != null) {
+            switch (action) {
+                case "delete":
+                    storage.delete(uuid);
+                    response.sendRedirect("resume");
+                    break;
+                case "view":
+                case "edit":
+                    resume = storage.get(uuid);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Action" + action + "not supported");
+            }
+        } else {
+            request.setAttribute("resume", storage.getAllSorted());
+            request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
         }
-        response.getWriter().write("</table>");
     }
 }
