@@ -46,6 +46,7 @@ public class ResumeDataUtil {
         Resume resume = getResume(uuid, name);
         resume.addContact(ContactType.PHONE, "8-850-666-88-91");
         resume.addContact(ContactType.MAIL, "mailbox@mail.com");
+        String s = resume.getContacts().get(ContactType.MAIL);
         return resume;
     }
 

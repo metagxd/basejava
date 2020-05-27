@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
-<jsp:include page="WEB-INF/jsp/fragments/header.jsp"/>
+<jsp:include page="fragments/header.jsp"/>
 <section>
     <table>
         <tr>
@@ -20,21 +20,23 @@
             <jsp:useBean id="resume" type="com.basejava.webapp.model.Resume"/>
             <tr>
                 <td>
-                    <a href="resume?uuid=${resume.uuid}&action=view">${resume.fullName}</a>
+                    <a href="resumes?uuid=${resume.uuid}&action=view">${resume.fullName}</a>
                 </td>
                 <td>
-                    ${resume.getContacts().get(ContactType.MAIL)}
+                    <%=
+                    ContactType.MAIL.toHtml(resume.getContacts().get(ContactType.MAIL))
+                    %>
                 </td>
                 <td>
-                    <a href="resume?uuid=${resume.uuid}&action=delete"></a>
+                    <a href="resumes?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Delete" width="24" height="24"></a>
                 </td>
                 <td>
-                    <a href="resume?uuid=${resume.uuid}&action=delete"></a>
+                    <a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit" width="24" height="24"></a>
                 </td>
             </tr>
         </c:forEach>
     </table>
 </section>
-<jsp:include page="WEB-INF/jsp/fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 </body>
 </html>

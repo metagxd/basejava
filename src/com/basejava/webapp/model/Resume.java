@@ -35,14 +35,14 @@ public class Resume implements Comparable<Resume>, Serializable {
     public Resume() {
     }
 
-    public void addContact(ContactType contactType, String contactInformation) {
+    public void addContact(ContactType contactType, String contactValue) {
         Objects.requireNonNull(contactType, "contactType can't be null!");
-        this.contacts.put(contactType, contactInformation);
+        this.contacts.put(contactType, contactValue);
     }
 
-    public void addSection(SectionType sectionType, Section section) {
+    public void addSection(SectionType sectionType, Section sectionValue) {
         Objects.requireNonNull(sectionType, "SectionType can't be null!");
-        this.sections.put(sectionType, section);
+        this.sections.put(sectionType, sectionValue);
     }
 
     public Map<ContactType, String> getContacts() {
@@ -85,5 +85,9 @@ public class Resume implements Comparable<Resume>, Serializable {
     @Override
     public int compareTo(Resume o) {
         return fullName.equals(o.getFullName()) ? uuid.compareTo(o.uuid) : fullName.compareTo(o.fullName);
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
