@@ -35,4 +35,13 @@ public class ListSection extends Section {
     public String toString() {
         return items.toString();
     }
+
+    @Override
+    public String toHtml() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String item : items) {
+            stringBuilder.append("<li>").append(item).append("</li>");
+        }
+        return stringBuilder.toString();
+    }
 }

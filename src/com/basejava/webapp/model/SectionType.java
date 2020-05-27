@@ -1,12 +1,12 @@
 package com.basejava.webapp.model;
 
 public enum SectionType {
-    PERSONAL("Личные качества"),
-    OBJECTIVE("Позиция"),
-    ACHIEVEMENT("Достижения"),
-    QUALIFICATIONS("Квалификация"),
-    EXPERIENCE("Опыт работы"),
-    EDUCATION("Образование");
+    PERSONAL("Personal information"),
+    OBJECTIVE("Objective"),
+    ACHIEVEMENT("Achievements"),
+    QUALIFICATIONS("Qualification"),
+    EXPERIENCE("Work experience"),
+    EDUCATION("Education");
 
     private final String title;
 

@@ -1,3 +1,5 @@
+<%@ page import="com.basejava.webapp.model.SectionType" %>
+<%@ page import="com.basejava.webapp.model.ListSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -9,7 +11,8 @@
 <body>
 <jsp:include page="fragments/header.jsp"/>
 <section>
-    <h2>${resume.fullName}&nbsp;<a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit" width="24" height="24"></a></h2>
+    <h2>${resume.fullName}&nbsp;<a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit"
+                                                                                       width="24" height="24"></a></h2>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
         <jsp:useBean id="contactEntry"
@@ -18,7 +21,13 @@
         </c:forEach>
     </p>
     <hr/>
-    
+    <c:forEach var="sectionEntry" items="${resume.sections}">
+        <jsp:useBean id="sectionEntry"
+                     type="java.util.Map.Entry<com.basejava.webapp.model.SectionType,com.basejava.webapp.model.Section>"/>
+        <c:set var="sectionType" value="${sectionEntry.key}" scope="page"/>
+        <p1>${sectionEntry.key.title}</p1>
+        ${sectionEntry.value.toHtml()}
+    </c:forEach>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

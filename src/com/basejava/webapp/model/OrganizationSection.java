@@ -50,4 +50,9 @@ public class OrganizationSection extends Section {
                 "organizations=" + organizations +
                 '}';
     }
+
+    @Override
+    public String toHtml() {
+        return "";
+    }
 }
