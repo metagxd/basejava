@@ -15,7 +15,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
             <dt>Name:</dt>
-            <dd><input type="text" name="fullName" size="50" value="${resume.fullName}"></dd>
+            <dd><input type="text" name="fullName" size="50" value="<c:out value="${resume.fullName}"/>"></dd>
         </dl>
         <h3>Contacts: </h3>
         <p>
@@ -23,7 +23,8 @@
         <dl>
             <dt>${type.title}</dt>
             <dd>
-                <input type="text" name="${type.name()}" size=30 value="${resume.getContacts().get(type)}">
+                <input type="text" name="<c:out value="${type.name()}"/>" size=30
+                       value="<c:out value="${resume.getContacts().get(type)}"/>">
             </dd>
         </dl>
         </c:forEach>
@@ -36,11 +37,12 @@
                 <dd>
                     <c:choose>
                         <c:when test="${type.name()=='PERSONAL'||type.name()=='OBJECTIVE'}">
-                            <input type="text" name="${type.name()}" size=60 value="${resume.getSections().get(type)}">
+                            <input type="text" name="<c:out value="${type.name()}"/>" size=60
+                                   value="<c:out value="${resume.getSections().get(type)}"/>">
                         </c:when>
                         <c:when test="${type.name()=='ACHIEVEMENT'||type.name()=='QUALIFICATIONS'}">
-                            <textarea name="${type.name()}" rows="5"
-                                      cols="50">${resume.getSections().get(type)}</textarea>
+                            <textarea name="<c:out value="${type.name()}"/>" rows="5"
+                                      cols="50"><c:out value="${resume.getSections().get(type)}"/></textarea>
                         </c:when>
                     </c:choose>
                 </dd>

@@ -20,7 +20,8 @@
             <jsp:useBean id="resume" type="com.basejava.webapp.model.Resume"/>
             <tr>
                 <td>
-                    <a href="resumes?uuid=${resume.uuid}&action=view">${resume.fullName}</a>
+                    <a href="resumes?uuid=<c:out value="${resume.uuid}"/>&action=view"><c:out
+                            value="${resume.fullName}"/></a>
                 </td>
                 <td>
                     <%=
@@ -28,12 +29,15 @@
                     %>
                 </td>
                 <td>
-                    <a href="resumes?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Delete"
-                                                                             width="24" height="24"></a>
+                    <a href="resumes?uuid=<c:out value="${resume.uuid}"/>&action=delete"><img src="img/delete.png"
+                                                                                              alt="Delete"
+                                                                                              width="24"
+                                                                                              height="24"></a>
                 </td>
                 <td>
-                    <a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit" width="24"
-                                                                           height="24"></a>
+                    <a href="resumes?uuid=<c:out value="${resume.uuid}"/>&action=edit"><img src="img/edit.png"
+                                                                                            alt="Edit" width="24"
+                                                                                            height="24"></a>
                 </td>
             </tr>
         </c:forEach>

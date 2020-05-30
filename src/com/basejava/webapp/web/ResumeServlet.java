@@ -51,6 +51,8 @@ public class ResumeServlet extends HttpServlet {
                     case EXPERIENCE:
                     case EDUCATION:
                         break;
+                    default:
+                        throw new IllegalArgumentException("Section " + sectionType + " not listed");
                 }
             } else {
                 resume.getSections().remove(sectionType);
