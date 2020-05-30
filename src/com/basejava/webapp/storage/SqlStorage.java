@@ -2,7 +2,10 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
-import com.basejava.webapp.model.*;
+import com.basejava.webapp.model.ContactType;
+import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.Section;
+import com.basejava.webapp.model.SectionType;
 import com.basejava.webapp.sql.SqlHelper;
 import com.basejava.webapp.util.JsonParser;
 
@@ -10,7 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
@@ -150,7 +156,6 @@ public class SqlStorage implements Storage {
         }
     }
 
-    //TODO Section writer via json
     private void writeSections(Resume resume, Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO section (resume_uuid, section_type, section_value) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {

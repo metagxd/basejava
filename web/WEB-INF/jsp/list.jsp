@@ -28,14 +28,17 @@
                     %>
                 </td>
                 <td>
-                    <a href="resumes?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Delete" width="24" height="24"></a>
+                    <a href="resumes?uuid=${resume.uuid}&action=delete"><img src="img/delete.png" alt="Delete"
+                                                                             width="24" height="24"></a>
                 </td>
                 <td>
-                    <a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit" width="24" height="24"></a>
+                    <a href="resumes?uuid=${resume.uuid}&action=edit"><img src="img/edit.png" alt="Edit" width="24"
+                                                                           height="24"></a>
                 </td>
             </tr>
         </c:forEach>
     </table>
+    <a href="resumes?action=add"><img src="img/add.png" alt="Add resume"></a>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

@@ -1,8 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.exception.NotExistStorageException;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
 import com.basejava.webapp.util.TestSqlStorageUtil;
 
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class ResumeServlet extends HttpServlet {
     private final Storage storage = TestSqlStorageUtil.getStorage();
@@ -32,6 +32,28 @@ public class ResumeServlet extends HttpServlet {
                 resume.addContact(type, value);
             } else {
                 resume.getContacts().remove(type);
+            }
+        }
+        for (SectionType sectionType : SectionType.values()) {
+            String value = request.getParameter(sectionType.name());
+            if (value != null && value.trim().length() != 0) {
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        resume.addSection(sectionType, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        String[] strings = value.split("\n");
+                        ListSection listSection = new ListSection(Arrays.asList(strings));
+                        resume.addSection(sectionType, listSection);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        break;
+                }
+            } else {
+                resume.getSections().remove(sectionType);
             }
         }
         try {
@@ -57,7 +79,7 @@ public class ResumeServlet extends HttpServlet {
                     resume = storage.get(uuid);
                     break;
                 case "add":
-                    resume = new Resume();
+                    resume = new Resume("");
                     break;
                 default:
                     throw new IllegalArgumentException("Action" + action + "not supported");

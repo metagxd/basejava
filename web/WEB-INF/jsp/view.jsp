@@ -1,5 +1,3 @@
-<%@ page import="com.basejava.webapp.model.SectionType" %>
-<%@ page import="com.basejava.webapp.model.ListSection" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -15,9 +13,9 @@
                                                                                        width="24" height="24"></a></h2>
     <p>
         <c:forEach var="contactEntry" items="${resume.contacts}">
-        <jsp:useBean id="contactEntry"
-                     type="java.util.Map.Entry<com.basejava.webapp.model.ContactType,java.lang.String>"/>
-        <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
+            <jsp:useBean id="contactEntry"
+                         type="java.util.Map.Entry<com.basejava.webapp.model.ContactType,java.lang.String>"/>
+            <%=contactEntry.getKey().toHtml(contactEntry.getValue())%><br/>
         </c:forEach>
     </p>
     <hr/>

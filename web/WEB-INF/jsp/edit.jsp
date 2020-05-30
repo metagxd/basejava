@@ -1,4 +1,5 @@
 <%@ page import="com.basejava.webapp.model.ContactType" %>
+<%@ page import="com.basejava.webapp.model.SectionType" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
@@ -21,8 +22,29 @@
             <c:forEach var="type" items="<%=ContactType.values()%>">
         <dl>
             <dt>${type.title}</dt>
-            <dd><input type="text" name="${type.name()}" size=30 value="${resume.getContacts().get(type)}"></dd>
+            <dd>
+                <input type="text" name="${type.name()}" size=30 value="${resume.getContacts().get(type)}">
+            </dd>
         </dl>
+        </c:forEach>
+        <hr>
+        <h3>Sections</h3>
+        <h5>For achievement and qualification: one item in one row!</h5>
+        <c:forEach var="type" items="<%=SectionType.values()%>">
+            <dl>
+                <dt>${type.title}</dt>
+                <dd>
+                    <c:choose>
+                        <c:when test="${type.name()=='PERSONAL'||type.name()=='OBJECTIVE'}">
+                            <input type="text" name="${type.name()}" size=60 value="${resume.getSections().get(type)}">
+                        </c:when>
+                        <c:when test="${type.name()=='ACHIEVEMENT'||type.name()=='QUALIFICATIONS'}">
+                            <textarea name="${type.name()}" rows="5"
+                                      cols="50">${resume.getSections().get(type)}</textarea>
+                        </c:when>
+                    </c:choose>
+                </dd>
+            </dl>
         </c:forEach>
         <hr>
         <button type="submit">Save</button>
