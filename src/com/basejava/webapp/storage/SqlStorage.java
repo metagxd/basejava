@@ -4,6 +4,7 @@ import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.sql.SqlHelper;
+import com.basejava.webapp.util.JsonParser;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -149,27 +150,15 @@ public class SqlStorage implements Storage {
         }
     }
 
+    //TODO Section writer via json
     private void writeSections(Resume resume, Connection connection) throws SQLException {
         try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO section (resume_uuid, section_type, section_value) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, Section> entry : resume.getSections().entrySet()) {
                 SectionType sectionType = entry.getKey();
                 preparedStatement.setString(1, resume.getUuid());
                 preparedStatement.setString(2, sectionType.name());
-                switch (sectionType) {
-                    case PERSONAL:
-                    case OBJECTIVE:
-                        preparedStatement.setString(3, entry.getValue().toString());
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        ListSection listSection = (ListSection) entry.getValue();
-                        String items = String.join("\n", listSection.getItems());
-                        preparedStatement.setString(3, items);
-                        break;
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        break;
-                }
+                Section section = entry.getValue();
+                preparedStatement.setString(3, JsonParser.write(section, Section.class));
                 preparedStatement.addBatch();
             }
             preparedStatement.executeBatch();
@@ -188,21 +177,8 @@ public class SqlStorage implements Storage {
         String type = resultSet.getString("section_type");
         if (type != null) {
             SectionType sectionType = SectionType.valueOf(type);
-            switch (sectionType) {
-                case PERSONAL:
-                case OBJECTIVE:
-                    String value = resultSet.getString("section_value");
-                    resume.addSection(sectionType, new TextSection(value));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    String values = resultSet.getString("section_value");
-                    resume.addSection(sectionType, new ListSection(Arrays.asList(values.split("\n"))));
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    break;
-            }
+            Section section = JsonParser.read(resultSet.getString("section_value"), Section.class);
+            resume.addSection(sectionType, section);
         }
     }
 }
