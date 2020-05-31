@@ -1,6 +1,5 @@
 package com.basejava.webapp.web;
 
-import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
 import com.basejava.webapp.util.TestSqlStorageUtil;
@@ -20,11 +19,14 @@ public class ResumeServlet extends HttpServlet {
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
         Resume resume;
-        try {
+        boolean isResumeNew;
+        if (uuid.equals("")) {
+            resume = new Resume(fullName);
+            isResumeNew = true;
+        } else {
             resume = storage.get(uuid);
             resume.setFullName(fullName);
-        } catch (NotExistStorageException e) {
-            resume = new Resume(uuid, fullName);
+            isResumeNew = false;
         }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
@@ -58,10 +60,10 @@ public class ResumeServlet extends HttpServlet {
                 resume.getSections().remove(sectionType);
             }
         }
-        try {
-            storage.update(resume);
-        } catch (NotExistStorageException e) {
+        if (isResumeNew) {
             storage.save(resume);
+        } else {
+            storage.update(resume);
         }
         response.sendRedirect("resumes");
     }
@@ -81,7 +83,7 @@ public class ResumeServlet extends HttpServlet {
                     resume = storage.get(uuid);
                     break;
                 case "add":
-                    resume = new Resume("");
+                    resume = new Resume(null, "");
                     break;
                 default:
                     throw new IllegalArgumentException("Action" + action + "not supported");
