@@ -13,6 +13,10 @@ public class OrganizationSection extends Section {
     public OrganizationSection() {
     }
 
+    public OrganizationSection(Organization organization) {
+        this.organizations.put(organization.getTitle(), organization);
+    }
+
     public void addOrganization(Organization organization) {
         if (organizations.containsKey(organization.getTitle())) {
             organizations.get(organization.getTitle()).addPeriods(organization.getPeriods());
@@ -53,6 +57,30 @@ public class OrganizationSection extends Section {
 
     @Override
     public String toHtml() {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Map.Entry<String, Organization> entry : organizations.entrySet()) {
+            stringBuilder
+                    .append("<br>")
+                    .append(entry.getKey())
+                    .append("<br>")
+                    .append("<a href =\"//")
+                    .append(entry.getValue().getHomePage().getUrl())
+                    .append("\">")
+                    .append(entry.getValue().getHomePage().getUrl())
+                    .append("</a>");
+            entry.getValue().getPeriods().forEach(period -> {
+                stringBuilder
+                        .append("<br>")
+                        .append("From ")
+                        .append(period.getStartTime().toString())
+                        .append(" to ")
+                        .append(period.getEndTime().toString())
+                        .append("<br>")
+                        .append(period.getPosition())
+                        .append(" ")
+                        .append(period.getDescription());
+            });
+        }
+        return stringBuilder.toString();
     }
 }

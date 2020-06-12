@@ -48,6 +48,10 @@ public class Organization implements Serializable {
         this.periods.addAll(periods);
     }
 
+    public void addPeriod(Period period) {
+        periods.add(period);
+    }
+
     public List<Period> getPeriods() {
         return periods;
     }

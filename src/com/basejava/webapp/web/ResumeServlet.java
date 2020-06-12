@@ -2,6 +2,7 @@ package com.basejava.webapp.web;
 
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
+import com.basejava.webapp.util.SectionUtil;
 import com.basejava.webapp.util.TestSqlStorageUtil;
 
 import javax.servlet.ServletException;
@@ -52,6 +53,7 @@ public class ResumeServlet extends HttpServlet {
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
+                        SectionUtil.parseOrganizationSection(request, sectionType, resume);
                         break;
                     default:
                         throw new IllegalArgumentException("Section " + sectionType + " not listed");
@@ -61,7 +63,9 @@ public class ResumeServlet extends HttpServlet {
             }
         }
         if (isResumeNew) {
-            storage.save(resume);
+            if (!resume.getFullName().equals("")) {
+                storage.save(resume);
+            }
         } else {
             storage.update(resume);
         }

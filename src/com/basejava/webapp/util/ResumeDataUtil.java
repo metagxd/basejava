@@ -13,13 +13,17 @@ public class ResumeDataUtil {
     private static final OrganizationSection EXPERIENCE_SECTION = new OrganizationSection();
     private static final Organization SCHOOL = new Organization("School", new Link("school site", ""),
             new Organization.Period(2002, SEPTEMBER, 2014, MAY, "student"));
-    private static final Organization JOB = new Organization("CompanyName", new Link("Job Site", "job.com"),
+    private static final Organization JOB = new Organization("CompanyName", new Link("Job Site", "http://job.com"),
             new Organization.Period(2016, SEPTEMBER, 2019, MAY, "Engineer", "Machine engineer"),
             new Organization.Period(2019, MAY, "Chief engineer", ""));
+    private static final Organization JOB2 = new Organization("CompanyName2", new Link("Job Site2", "http://job2.com"),
+            new Organization.Period(2011, SEPTEMBER, 2012, MAY, "Engineer2", "Machine engineer2"),
+            new Organization.Period(2019, MAY, "Chief engineer2", "2"));
 
     static {
         EDUCATION_SECTION.addOrganization(SCHOOL);
         EXPERIENCE_SECTION.addOrganization(JOB);
+        EXPERIENCE_SECTION.addOrganization(JOB2);
     }
 
     public static Resume getResume(String uuid, String name) {
@@ -28,8 +32,8 @@ public class ResumeDataUtil {
         resume.addSection(SectionType.OBJECTIVE, new TextSection("objective example"));
         resume.addSection(SectionType.ACHIEVEMENT, new ListSection(Arrays.asList("achievement1", "achievement2")));
         resume.addSection(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList("qualification1", "qualification2")));
-        /*resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
-        resume.addSection(SectionType.EDUCATION, EDUCATION_SECTION);*/
+        resume.addSection(SectionType.EXPERIENCE, EXPERIENCE_SECTION);
+        resume.addSection(SectionType.EDUCATION, EDUCATION_SECTION);
         resume.addSection(SectionType.PERSONAL, new TextSection("personals example"));
         resume.addContact(ContactType.PHONE, "8-800-000-00-00");
         resume.addContact(ContactType.MOBILE, "8-800-000-00-00");

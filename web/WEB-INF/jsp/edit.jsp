@@ -1,10 +1,13 @@
 <%@ page import="com.basejava.webapp.model.ContactType" %>
 <%@ page import="com.basejava.webapp.model.SectionType" %>
+<%@ page import="com.basejava.webapp.util.SectionUtil" %>
+<%@ page import="com.basejava.webapp.model.Organization" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <jsp:useBean id="resume" type="com.basejava.webapp.model.Resume" scope="request"/>
+    <jsp:useBean id="SectionUtil" class="com.basejava.webapp.util.SectionUtil"/>
     <title>Resume ${resume.fullName}</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -38,11 +41,38 @@
                     <c:choose>
                         <c:when test="${type.name()=='PERSONAL'||type.name()=='OBJECTIVE'}">
                             <input type="text" name="<c:out value="${type.name()}"/>" size=60
-                                   value="<c:out value="${resume.getSections().get(type)}"/>">
+                                   value="<c:out value="${resume.sections.get(type)}"/>">
                         </c:when>
                         <c:when test="${type.name()=='ACHIEVEMENT'||type.name()=='QUALIFICATIONS'}">
                             <textarea name="<c:out value="${type.name()}"/>" rows="5"
-                                      cols="50"><c:out value="${resume.getSections().get(type)}"/></textarea>
+                                      cols="50"><c:out value="${resume.sections.get(type)}"/></textarea>
+                        </c:when>
+                        <c:when test="${type.name()=='EXPERIENCE'||type.name()=='EDUCATION'}">
+                            <input name="${type.name()}"
+                                   value="${SectionUtil.toOrganizationSection(resume.sections.get(type)).organizations.size()}"
+                                   type="hidden">
+                            <c:forEach var="organizations"
+                                       items="${SectionUtil.toOrganizationSection(resume.sections.get(type))
+                                       .getOrganizations().values()}">
+                                <jsp:useBean id="organizations" class="com.basejava.webapp.model.Organization"/>
+                                <input type="text" name="organizationTitle" size="50"
+                                       value="<c:out value="${organizations.title}"/>">
+                                <input type="url" name="url" size="20"
+                                       value="<c:out value="${organizations.homePage.url}"/>"><br>
+                                <input type="hidden" name="numOfPeriods" value="${organizations.periods.size()}">
+                                <c:forEach var="periods" items="${organizations.periods}">
+                                    from
+                                    <input type="date" name="startTime" size="20" value="${periods.startTime}">
+                                    to
+                                    <input type="date" name="endTime" size="20" value="${periods.endTime}">
+                                    <br>
+                                    position
+                                    <input type="text" name="position" size="20" value="${periods.position}">
+                                    <br>
+                                    <textarea name="description" rows="5" cols="50">${periods.description}</textarea>
+                                    <br>
+                                </c:forEach>
+                            </c:forEach>
                         </c:when>
                     </c:choose>
                 </dd>
@@ -51,7 +81,7 @@
         <hr>
         <button type="submit">Save</button>
         <button onclick="window.history.back()">Reset</button>
-        </p></form>
+        </p></p></form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
