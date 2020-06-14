@@ -3,14 +3,10 @@ package com.basejava.webapp.util;
 import com.basejava.webapp.model.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class SectionUtil {
     public static OrganizationSection toOrganizationSection(Section section) {
@@ -49,8 +45,8 @@ public class SectionUtil {
             Link url = new Link(organizationTitle + " site", request.getParameterValues("url")[i]);
             int periodsStartPosition = 0;
             if (i != 0) {
-                for (int j = 0; j < i + start; j++) {
-                    periodsStartPosition += periods.get(i);
+                for (int j = 0; j < i; j++) {
+                    periodsStartPosition += periods.get(j);
                 }
             }
             Organization organization = new Organization(organizationTitle, url);

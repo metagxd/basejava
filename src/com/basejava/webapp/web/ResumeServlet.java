@@ -83,11 +83,21 @@ public class ResumeServlet extends HttpServlet {
                     response.sendRedirect("resumes");
                     return;
                 case "view":
+                    resume = storage.get(uuid);
+                    break;
                 case "edit":
                     resume = storage.get(uuid);
+                    OrganizationSection expSection = (OrganizationSection) resume.getSections().get(SectionType.EXPERIENCE);
+                    OrganizationSection eduSection = (OrganizationSection) resume.getSections().get(SectionType.EDUCATION);
+                    expSection.addOrganization(new Organization("", new Link("", ""), new Organization.Period()));
+                    eduSection.addOrganization(new Organization("", new Link("", ""), new Organization.Period()));
                     break;
                 case "add":
                     resume = new Resume(null, "");
+                    OrganizationSection organizationSection = new OrganizationSection();
+                    organizationSection.addOrganization(new Organization("", new Link("", ""), new Organization.Period()));
+                    resume.addSection(SectionType.EXPERIENCE, organizationSection);
+                    resume.addSection(SectionType.EDUCATION, organizationSection);
                     break;
                 default:
                     throw new IllegalArgumentException("Action" + action + "not supported");
