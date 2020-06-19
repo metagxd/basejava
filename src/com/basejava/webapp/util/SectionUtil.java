@@ -62,6 +62,8 @@ public class SectionUtil {
             }
             organizationSection.addOrganization(organization);
         }
-        resume.addSection(sectionType, organizationSection);
+        if (organizationSection.getOrganizations().size() != 0) {
+            resume.addSection(sectionType, organizationSection);
+        }
     }
 }

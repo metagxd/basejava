@@ -4,10 +4,13 @@
 <%@ page import="com.basejava.webapp.model.Organization" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="C" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <jsp:useBean id="resume" type="com.basejava.webapp.model.Resume" scope="request"/>
     <jsp:useBean id="SectionUtil" class="com.basejava.webapp.util.SectionUtil"/>
+    <jsp:useBean id="expSection" type="com.basejava.webapp.model.OrganizationSection" scope="request"/>
+    <jsp:useBean id="eduSection" type="com.basejava.webapp.model.OrganizationSection" scope="request"/>
     <title>Resume ${resume.fullName}</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
@@ -48,12 +51,21 @@
                                       cols="50"><c:out value="${resume.sections.get(type)}"/></textarea>
                         </c:when>
                         <c:when test="${type.name()=='EXPERIENCE'||type.name()=='EDUCATION'}">
+                            <jsp:useBean id="organizationSection"
+                                         class="com.basejava.webapp.model.OrganizationSection"/>
+                            <c:choose>
+                                <c:when test="${type.name()=='EXPERIENCE'}">
+                                    <c:set var="organizationSection" value="${expSection}"/>
+                                </c:when>
+                                <c:when test="${type.name()=='EDUCATION'}">
+                                    <c:set var="organizationSection" value="${eduSection}"/>
+                                </c:when>
+                            </c:choose>
                             <input name="${type.name()}"
-                                   value="${SectionUtil.toOrganizationSection(resume.sections.get(type)).organizations.size()}"
+                                   value="${organizationSection.organizations.size()}"
                                    type="hidden">
                             <c:forEach var="organizations"
-                                       items="${SectionUtil.toOrganizationSection(resume.sections.get(type))
-                                       .getOrganizations().values()}">
+                                       items="${organizationSection.getOrganizations().values()}">
                                 <jsp:useBean id="organizations" class="com.basejava.webapp.model.Organization"/>
                                 <input type="text" name="organizationTitle" size="50"
                                        value="<c:out value="${organizations.title}"/>">
