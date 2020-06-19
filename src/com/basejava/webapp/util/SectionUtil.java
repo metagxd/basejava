@@ -39,28 +39,27 @@ public class SectionUtil {
         Arrays.asList(request.getParameterMap().get("numOfPeriods")).forEach(s -> periods.add(Integer.parseInt(s)));
         for (int i = start; i < end; i++) {
             String organizationTitle = request.getParameterValues("organizationTitle")[i];
-            if (organizationTitle.equals("")) {
-                break;
-            }
-            Link url = new Link(organizationTitle + " site", request.getParameterValues("url")[i]);
-            int periodsStartPosition = 0;
-            if (i != 0) {
-                for (int j = 0; j < i; j++) {
-                    periodsStartPosition += periods.get(j);
+            if (!organizationTitle.equals("")) {
+                Link url = new Link(organizationTitle + " site", request.getParameterValues("url")[i]);
+                int periodsStartPosition = 0;
+                if (i != 0) {
+                    for (int j = 0; j < i; j++) {
+                        periodsStartPosition += periods.get(j);
+                    }
                 }
-            }
-            Organization organization = new Organization(organizationTitle, url);
-            for (int j = periodsStartPosition; j < periodsStartPosition + periods.get(i); j++) {
-                String position = request.getParameterValues("position")[j];
-                if (!position.equals("")) {
-                    LocalDate startTime = LocalDate.parse(request.getParameterValues("startTime")[j], DateUtil.formatter());
-                    LocalDate endTime = LocalDate.parse(request.getParameterValues("endTime")[j], DateUtil.formatter());
-                    String description = request.getParameterValues("description")[j];
-                    Organization.Period period = new Organization.Period(startTime, endTime, position, description);
-                    organization.addPeriod(period);
+                Organization organization = new Organization(organizationTitle, url);
+                for (int j = periodsStartPosition; j < periodsStartPosition + periods.get(i); j++) {
+                    String position = request.getParameterValues("position")[j];
+                    if (!position.equals("")) {
+                        LocalDate startTime = LocalDate.parse(request.getParameterValues("startTime")[j], DateUtil.formatter());
+                        LocalDate endTime = LocalDate.parse(request.getParameterValues("endTime")[j], DateUtil.formatter());
+                        String description = request.getParameterValues("description")[j];
+                        Organization.Period period = new Organization.Period(startTime, endTime, position, description);
+                        organization.addPeriod(period);
+                    }
                 }
+                organizationSection.addOrganization(organization);
             }
-            organizationSection.addOrganization(organization);
         }
         if (organizationSection.getOrganizations().size() != 0) {
             resume.addSection(sectionType, organizationSection);
