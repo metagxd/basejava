@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    protected static final File PROPS = new File(".\\config\\resumes.properties");
+    protected static final String PROPS = "/resumes.properties";
     private static final Config INSTANCE = new Config();
     private final File storageDir;
     private final String dbUrl;
@@ -16,7 +16,7 @@ public class Config {
 
 
     private Config() {
-        try (InputStream inputStream = new FileInputStream(PROPS)) {
+        try (InputStream inputStream = Config.class.getResourceAsStream(PROPS)) {
             Properties properties = new Properties();
             properties.load(inputStream);
             storageDir = new File(properties.getProperty("storage.dir"));
@@ -25,7 +25,7 @@ public class Config {
             dbPassword = properties.getProperty("db.password");
 
         } catch (IOException e) {
-            throw new IllegalStateException("Invalid config file!" + PROPS.getAbsolutePath(), e);
+            throw new IllegalStateException("Invalid config file!" + PROPS, e);
         }
     }
 

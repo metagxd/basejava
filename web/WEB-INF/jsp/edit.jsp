@@ -84,6 +84,7 @@
                                     <textarea name="description" rows="5" cols="50">${periods.description}</textarea>
                                     <br>
                                 </c:forEach>
+                                <hr>
                             </c:forEach>
                         </c:when>
                     </c:choose>
